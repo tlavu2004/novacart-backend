@@ -9,9 +9,6 @@ spring:
     url: jdbc:postgresql://${APP_DB_HOST:localhost}:${APP_DB_PORT:5432}/${APP_DB_NAME:novacart}
     username: ${APP_DB_USERNAME}
     password: ${APP_DB_PASSWORD}
-#    url: jdbc:postgresql://localhost:5432/novacart
-#    username: postgres
-#    password: password
     driver-class-name: org.postgresql.Driver
 
   jpa:

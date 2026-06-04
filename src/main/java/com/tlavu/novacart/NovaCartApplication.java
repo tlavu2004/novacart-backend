@@ -1,4 +1,4 @@
-package com.tlavu.novacart.bootstrap;
+package com.tlavu.novacart;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
