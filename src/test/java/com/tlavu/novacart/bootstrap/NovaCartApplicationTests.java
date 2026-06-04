@@ -1,4 +1,4 @@
-package com.tlavu.novacart;
+package com.tlavu.novacart.bootstrap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
