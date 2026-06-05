@@ -31,7 +31,7 @@ public class HealthController {
                     .body(new HealthResponse(
                             "DOWN",
                             "Database connection failed",
-                            e.getMessage()
+                            e.getClass().getSimpleName()
                     )
             );
         }
