@@ -2,9 +2,9 @@ CREATE TABLE IF NOT EXISTS categories (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP NULL,
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL,
+    deleted_at TIMESTAMPTZ NULL,
 
    CONSTRAINT uk_categories_name
        UNIQUE (name)
@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT,
     price NUMERIC(12, 2) NOT NULL,
     stock_quantity INTEGER NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP NULL,
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL,
+    deleted_at TIMESTAMPTZ NULL,
 
     CONSTRAINT fk_products_category
         FOREIGN KEY (category_id)
