@@ -13,11 +13,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
     show-sql: ${SPRING_JPA_SHOW_SQL:false}
     properties:
       hibernate:
-        format_sql: ${SPRING_JPA_HIBERNATE_FORMAT_SQL:true}
+        format_sql: ${SPRING_JPA_HIBERNATE_FORMAT_SQL:false}
 
 server:
   port: ${SERVER_PORT:8080}
