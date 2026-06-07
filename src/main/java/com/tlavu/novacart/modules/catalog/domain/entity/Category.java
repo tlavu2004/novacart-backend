@@ -1,11 +1,17 @@
 package com.tlavu.novacart.modules.catalog.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "categories")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Category {
 
     @Id
@@ -16,7 +22,7 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -27,4 +33,16 @@ public class Category {
 
     @Column(name = "deleted_at")
     private Instant deletedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        Instant now = Instant.now();
+        createdAt = now;
+        updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Instant.now();
+    }
 }
