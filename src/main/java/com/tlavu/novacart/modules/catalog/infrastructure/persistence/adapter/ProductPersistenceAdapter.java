@@ -6,6 +6,8 @@ import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.Product
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class ProductPersistenceAdapter implements ProductRepository {
@@ -15,6 +17,11 @@ public class ProductPersistenceAdapter implements ProductRepository {
     @Override
     public Product save(Product product) {
         return productJpaRepository.save(product);
+    }
+
+    @Override
+    public Optional<Product> findById(Long id) {
+        return productJpaRepository.findById(id);
     }
 
     @Override

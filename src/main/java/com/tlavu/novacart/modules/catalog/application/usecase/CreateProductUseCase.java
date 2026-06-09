@@ -7,6 +7,8 @@ import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class CreateProductUseCase {
@@ -14,7 +16,12 @@ public class CreateProductUseCase {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public Product execute(Long categoryId,String name) {
+    public Product execute(
+            String name,
+            BigDecimal price,
+            Integer stockQuantity,
+            Long categoryId
+    ) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Product name invalid.");
         }
@@ -29,6 +36,8 @@ public class CreateProductUseCase {
 
         Product product = new Product();
         product.setName(name);
+        product.setPrice(price);
+        product.setStockQuantity(stockQuantity);
         product.setCategory(category);
 
         return productRepository.save(product);
