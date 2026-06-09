@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS categories (
+CREATE TABLE categories (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS categories (
        UNIQUE (name)
 );
 
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE products (
     id BIGSERIAL PRIMARY KEY,
     category_id BIGINT NOT NULL,
     name VARCHAR(255) NOT NULL,
