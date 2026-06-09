@@ -25,6 +25,15 @@ public class CreateProductUseCase {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Product name invalid.");
         }
+        if (price == null) {
+            throw new IllegalArgumentException("Product price invalid.");
+        }
+        if (stockQuantity == null) {
+            throw new IllegalArgumentException("Product stock quantity invalid.");
+        }
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Category id invalid.");
+        }
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() ->
