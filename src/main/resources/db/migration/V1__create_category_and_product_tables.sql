@@ -23,7 +23,10 @@ CREATE TABLE products (
 
     CONSTRAINT fk_products_category
         FOREIGN KEY (category_id)
-        REFERENCES categories (id)
+        REFERENCES categories (id),
+
+    CONSTRAINT uk_products_name
+        UNIQUE (name)
 );
 
 CREATE INDEX idx_products_category_id
