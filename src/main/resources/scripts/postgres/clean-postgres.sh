@@ -37,13 +37,13 @@ fi
 # Load variables from service .env (robustly without requiring quotes)
 echo "Loading environment from $ENV_FILE..."
 
-while IFS='=' read -r key value || [[ -n "$key" ]]; do
+while IFS='=' read -r key value || [[ -n "${key-}" ]]; do
   # Skip comments and empty lines
   if [[ $key =~ ^#.* ]] || [[ -z $key ]]; then
     continue
   fi
 
-  # Clean potential carriage returns and spaces
+  # Clean potential carriage returns
   key=${key//$'\r'/}
   value=${value//$'\r'/}
 
