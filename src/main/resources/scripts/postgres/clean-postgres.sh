@@ -52,7 +52,7 @@ while IFS='=' read -r key value || [[ -n "$key" ]]; do
   fi
 done < "$ENV_FILE"
 
-# Validate required variables (aligned with LinkForge .env)
+# Validate required variables (aligned with NovaCart .env)
 required_vars=(
   DB_HOST
   DB_PORT
