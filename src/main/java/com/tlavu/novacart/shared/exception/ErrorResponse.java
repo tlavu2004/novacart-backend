@@ -1,4 +1,4 @@
-package com.tlavu.novacart.modules.catalog.presentation.dto;
+package com.tlavu.novacart.shared.exception;
 
 import java.time.Instant;
 import java.util.Map;
