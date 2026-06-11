@@ -27,7 +27,10 @@ public class CategoryController {
             CreateCategoryRequest request
     ) {
 
-        Category category = createCategoryUseCase.execute(request.name());
+        Category category = createCategoryUseCase.execute(
+                request.name(),
+                request.description()
+        );
 
         CategoryResponse categoryResponse = new CategoryResponse(
                 category.getId(),

@@ -11,7 +11,10 @@ public class CreateCategoryUseCase {
 
     private final CategoryRepository categoryRepository;
 
-    public Category execute(String name) {
+    public Category execute(
+            String name,
+            String description
+    ) {
 
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Category name invalid.");
@@ -23,6 +26,7 @@ public class CreateCategoryUseCase {
 
         Category category = new Category();
         category.setName(name);
+        category.setDescription(description);
 
         return categoryRepository.save(category);
     }
