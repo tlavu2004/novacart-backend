@@ -8,5 +8,5 @@ public record ErrorResponse(
         String message,
         Instant timestamp,
         String path,
-        Map<String, Object> errors
+        Map<String, String> errors
 ) {}
