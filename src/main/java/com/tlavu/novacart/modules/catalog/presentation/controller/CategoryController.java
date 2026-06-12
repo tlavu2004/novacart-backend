@@ -19,7 +19,7 @@ public class CategoryController {
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;
     private final CreateCategoryUseCase createCategoryUseCase;
 
-    @GetMapping()
+    @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(
             @PathVariable Long id
     ) {

@@ -9,7 +9,7 @@ public record CategoryResponse (
         String name,
         String description,
         Instant createdAt,
-        Instant updateAt
+        Instant updatedAt
 ) {
 
     public static CategoryResponse from(Category category) {
