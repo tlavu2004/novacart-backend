@@ -1,10 +1,10 @@
-package com.tlavu.novacart.shared.exception.handler;
+package com.tlavu.novacart.modules.catalog.presentation.exception.handler;
 
 import com.tlavu.novacart.modules.catalog.domain.exception.CategoryAlreadyExistsException;
 import com.tlavu.novacart.modules.catalog.domain.exception.CategoryNotFoundException;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
-import com.tlavu.novacart.shared.exception.dto.ErrorResponse;
-import com.tlavu.novacart.shared.exception.dto.FieldErrorResponse;
+import com.tlavu.novacart.modules.catalog.presentation.exception.dto.ErrorResponse;
+import com.tlavu.novacart.modules.catalog.presentation.exception.dto.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
