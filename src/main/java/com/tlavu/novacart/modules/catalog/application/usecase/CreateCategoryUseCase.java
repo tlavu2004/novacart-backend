@@ -1,6 +1,7 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
+import com.tlavu.novacart.modules.catalog.domain.exception.CategoryAlreadyExistsException;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,8 @@ public class CreateCategoryUseCase {
             String description
     ) {
 
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Category name invalid.");
-        }
-
         if (categoryRepository.existsByName(name)) {
-            throw new IllegalStateException("Category already exists.");
+            throw new CategoryAlreadyExistsException(name);
         }
 
         Category category = new Category();

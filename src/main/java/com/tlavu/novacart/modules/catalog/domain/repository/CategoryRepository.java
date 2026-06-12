@@ -2,6 +2,7 @@ package com.tlavu.novacart.modules.catalog.domain.repository;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository {
@@ -9,6 +10,8 @@ public interface CategoryRepository {
     Category save(Category category);
 
     Optional<Category> findById(Long id);
+
+    List<Category> findAll();
 
     boolean existsByName(String name);
 }

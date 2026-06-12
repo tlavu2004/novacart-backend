@@ -6,6 +6,7 @@ import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.Categor
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -22,6 +23,11 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
     @Override
     public Optional<Category> findById(Long id) {
         return categoryJpaRepository.findById(id);
+    }
+
+    @Override
+    public List<Category> findAll() {
+        return categoryJpaRepository.findAll();
     }
 
     @Override
