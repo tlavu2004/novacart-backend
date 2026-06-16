@@ -1,4 +1,4 @@
-package com.tlavu.novacart.shared.exception.dto;
+package com.tlavu.novacart.modules.catalog.presentation.exception.dto;
 
 import java.time.Instant;
 import java.util.List;

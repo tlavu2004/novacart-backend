@@ -1,9 +1,13 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
+import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
+import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
+import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,24 +27,41 @@ public class CreateProductUseCase {
             Long categoryId
     ) {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Product name invalid.");
+            throw new ValidationException(
+                    ErrorCode.VALIDATION_FAILED,
+                    "Product name is required"
+            );
         }
         if (price == null) {
-            throw new IllegalArgumentException("Product price invalid.");
+            throw new ValidationException(
+                    ErrorCode.VALIDATION_FAILED,
+                    "Product price is required"
+            );
         }
         if (stockQuantity == null) {
-            throw new IllegalArgumentException("Product stock quantity invalid.");
+            throw new ValidationException(
+                    ErrorCode.VALIDATION_FAILED,
+                    "Product stock quantity is required"
+            );
         }
         if (categoryId == null) {
-            throw new IllegalArgumentException("Category id invalid.");
+            throw new ValidationException(
+                    ErrorCode.VALIDATION_FAILED,
+                    "Category id is required"
+            );
         }
 
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() ->
-                        new IllegalStateException("Category not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorCode.CATEGORY_NOT_FOUND,
+                        "Category with id=%d not found".formatted(categoryId)
+                ));
 
         if (productRepository.existsByName(name)) {
-            throw new IllegalStateException("Product already exists.");
+            throw new ConflictException(
+                    ErrorCode.PRODUCT_ALREADY_EXISTS,
+                    "Product '%s' already exists".formatted(name)
+            );
         }
 
         Product product = new Product();
