@@ -1,7 +1,8 @@
 package com.tlavu.novacart.modules.catalog.presentation.exception.handler;
 
-import com.tlavu.novacart.modules.catalog.domain.exception.CategoryAlreadyExistsException;
-import com.tlavu.novacart.modules.catalog.domain.exception.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
+import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import com.tlavu.novacart.modules.catalog.presentation.exception.dto.ErrorResponse;
 import com.tlavu.novacart.modules.catalog.presentation.exception.dto.FieldErrorResponse;
@@ -21,40 +22,8 @@ import java.util.Objects;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
-            IllegalArgumentException ex,
-            HttpServletRequest request
-    ) {
-
-        return buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                ErrorCode.VALIDATION_FAILED,
-                safeMessage(ex),
-                request,
-                null,
-                ex
-        );
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalStateException(
-            IllegalStateException ex,
-            HttpServletRequest request
-    ) {
-
-        return buildErrorResponse(
-                HttpStatus.CONFLICT,
-                ErrorCode.CATEGORY_ALREADY_EXISTS,
-                safeMessage(ex),
-                request,
-                null,
-                ex
-        );
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             HttpServletRequest request
     ) {
@@ -78,15 +47,15 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleCategoryNotFound(
-            CategoryNotFoundException ex,
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(
+            ResourceNotFoundException ex,
             HttpServletRequest request
     ) {
 
         return buildErrorResponse(
                 HttpStatus.NOT_FOUND,
-                ErrorCode.CATEGORY_NOT_FOUND,
+                ex.getErrorCode(),
                 safeMessage(ex),
                 request,
                 null,
@@ -94,14 +63,31 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleCategoryAlreadyExists(
-            CategoryAlreadyExistsException ex,
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handleConflict(
+            ConflictException ex,
             HttpServletRequest request
     ) {
+
         return buildErrorResponse(
                 HttpStatus.CONFLICT,
-                ErrorCode.CATEGORY_ALREADY_EXISTS,
+                ex.getErrorCode(),
+                safeMessage(ex),
+                request,
+                null,
+                ex
+        );
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponse> handleValidation(
+            ValidationException ex,
+            HttpServletRequest request
+    ) {
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getErrorCode(),
                 safeMessage(ex),
                 request,
                 null,
@@ -155,7 +141,7 @@ public class GlobalExceptionHandler {
     private void logByStatus(
             HttpStatus status,
             HttpServletRequest request,
-            Exception ex
+            Throwable ex
     ) {
 
         String safeMessage = safeMessage(ex);
@@ -176,8 +162,8 @@ public class GlobalExceptionHandler {
         }
     }
 
-    private String safeMessage(Exception ex) {
-        if (ex == null || ex.getMessage() == null) {
+    private String safeMessage(Throwable ex) {
+        if (ex == null || ex.getMessage() == null || ex.getMessage().isBlank()) {
             return "Unexpected error";
         }
         return ex.getMessage();

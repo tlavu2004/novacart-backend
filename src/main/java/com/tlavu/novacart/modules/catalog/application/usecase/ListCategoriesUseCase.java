@@ -14,6 +14,7 @@ public class ListCategoriesUseCase {
     private final CategoryRepository categoryRepository;
 
     public List<Category> execute() {
+
         return categoryRepository.findAll();
     }
 }
