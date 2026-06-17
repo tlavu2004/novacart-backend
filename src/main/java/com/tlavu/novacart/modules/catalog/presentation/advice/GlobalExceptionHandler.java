@@ -4,7 +4,7 @@ import com.tlavu.novacart.modules.catalog.application.exception.ConflictExceptio
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
-import com.tlavu.novacart.shared.dto.ErrorResponse;
+import com.tlavu.novacart.shared.dto.ApiError;
 import com.tlavu.novacart.shared.dto.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +22,7 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
+    public ResponseEntity<ApiError> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             HttpServletRequest request
     ) {
@@ -48,7 +47,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(
+    public ResponseEntity<ApiError> handleResourceNotFound(
             ResourceNotFoundException ex,
             HttpServletRequest request
     ) {
@@ -64,7 +63,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ErrorResponse> handleConflict(
+    public ResponseEntity<ApiError> handleConflict(
             ConflictException ex,
             HttpServletRequest request
     ) {
@@ -80,7 +79,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(
+    public ResponseEntity<ApiError> handleValidation(
             ValidationException ex,
             HttpServletRequest request
     ) {
@@ -97,7 +96,7 @@ public class GlobalExceptionHandler {
 
     // Global fallback exception handler for all unhandled exceptions.
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(
+    public ResponseEntity<ApiError> handleException(
             Exception ex,
             HttpServletRequest request
     ) {
@@ -113,7 +112,7 @@ public class GlobalExceptionHandler {
     }
 
     // Builds a standardized {@link ErrorResponse} wrapped in a {@link ResponseEntity}.
-    private ResponseEntity<ErrorResponse> buildErrorResponse(
+    private ResponseEntity<ApiError> buildErrorResponse(
             HttpStatus status,
             ErrorCode errorCode,
             String message,
@@ -124,11 +123,10 @@ public class GlobalExceptionHandler {
 
         logByStatus(status, request, ex);
 
-        ErrorResponse response = new ErrorResponse(
+        ApiError response = new ApiError(
                 status.value(),
                 errorCode.getCode(),
                 message,
-                Instant.now(),
                 request.getRequestURI(),
                 errors
         );
