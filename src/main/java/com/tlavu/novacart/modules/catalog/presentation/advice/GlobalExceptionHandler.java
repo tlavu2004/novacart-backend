@@ -3,6 +3,7 @@ package com.tlavu.novacart.modules.catalog.presentation.advice;
 import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
+import com.tlavu.novacart.shared.dto.ApiResponse;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import com.tlavu.novacart.shared.dto.ApiError;
 import com.tlavu.novacart.shared.dto.FieldErrorResponse;
@@ -22,7 +23,7 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleMethodArgumentNotValid(
+    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             HttpServletRequest request
     ) {
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleResourceNotFound(
+    public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(
             ResourceNotFoundException ex,
             HttpServletRequest request
     ) {
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiError> handleConflict(
+    public ResponseEntity<ApiResponse<Void>> handleConflict(
             ConflictException ex,
             HttpServletRequest request
     ) {
@@ -79,7 +80,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ApiError> handleValidation(
+    public ResponseEntity<ApiResponse<Void>> handleValidation(
             ValidationException ex,
             HttpServletRequest request
     ) {
@@ -96,7 +97,7 @@ public class GlobalExceptionHandler {
 
     // Global fallback exception handler for all unhandled exceptions.
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleException(
+    public ResponseEntity<ApiResponse<Void>> handleException(
             Exception ex,
             HttpServletRequest request
     ) {
@@ -112,7 +113,7 @@ public class GlobalExceptionHandler {
     }
 
     // Builds a standardized {@link ErrorResponse} wrapped in a {@link ResponseEntity}.
-    private ResponseEntity<ApiError> buildErrorResponse(
+    private ResponseEntity<ApiResponse<Void>> buildErrorResponse(
             HttpStatus status,
             ErrorCode errorCode,
             String message,
@@ -123,7 +124,7 @@ public class GlobalExceptionHandler {
 
         logByStatus(status, request, ex);
 
-        ApiError response = new ApiError(
+        ApiError error = new ApiError(
                 status.value(),
                 errorCode.getCode(),
                 message,
@@ -132,7 +133,7 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(status)
-                .body(response);
+                .body(ApiResponse.error(error));
     }
 
     // Helper
