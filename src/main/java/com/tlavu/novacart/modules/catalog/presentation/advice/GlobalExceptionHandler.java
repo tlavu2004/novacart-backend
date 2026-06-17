@@ -1,11 +1,11 @@
-package com.tlavu.novacart.modules.catalog.presentation.exception.handler;
+package com.tlavu.novacart.modules.catalog.presentation.advice;
 
 import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
-import com.tlavu.novacart.modules.catalog.presentation.exception.dto.ErrorResponse;
-import com.tlavu.novacart.modules.catalog.presentation.exception.dto.FieldErrorResponse;
+import com.tlavu.novacart.shared.dto.ErrorResponse;
+import com.tlavu.novacart.shared.dto.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
