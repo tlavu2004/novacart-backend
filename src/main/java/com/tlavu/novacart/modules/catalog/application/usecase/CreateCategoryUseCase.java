@@ -18,7 +18,7 @@ public class CreateCategoryUseCase {
             String description
     ) {
 
-        if (categoryRepository.existsByName(name)) {
+        if (categoryRepository.existsByNameIgnoreCase(name)) {
             throw new ConflictException(
                     ErrorCode.CATEGORY_ALREADY_EXISTS,
                     "Category '%s' already exists".formatted(name)

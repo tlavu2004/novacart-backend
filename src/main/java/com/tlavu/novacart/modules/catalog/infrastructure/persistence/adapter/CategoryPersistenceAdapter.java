@@ -17,21 +17,25 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
 
     @Override
     public Category save(Category category) {
+
         return categoryJpaRepository.save(category);
     }
 
     @Override
     public Optional<Category> findById(Long id) {
+
         return categoryJpaRepository.findById(id);
     }
 
     @Override
     public List<Category> findAll() {
+
         return categoryJpaRepository.findAll();
     }
 
     @Override
-    public boolean existsByName(String name) {
-        return categoryJpaRepository.existsByName(name);
+    public boolean existsByNameIgnoreCase(String name) {
+
+        return categoryJpaRepository.existsByNameIgnoreCase(name);
     }
 }

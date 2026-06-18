@@ -33,7 +33,7 @@ public class CreateProductUseCase {
                         "Category with id=%d not found".formatted(categoryId)
                 ));
 
-        if (productRepository.existsByName(name)) {
+        if (productRepository.existsByNameIgnoreCase(name)) {
             throw new ConflictException(
                     ErrorCode.PRODUCT_ALREADY_EXISTS,
                     "Product '%s' already exists".formatted(name)
