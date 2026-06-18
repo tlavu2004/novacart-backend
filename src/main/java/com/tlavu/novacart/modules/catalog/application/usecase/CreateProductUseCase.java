@@ -21,6 +21,7 @@ public class CreateProductUseCase {
 
     public Product execute(
             String name,
+            String description,
             BigDecimal price,
             Integer stockQuantity,
             Long categoryId
@@ -41,6 +42,7 @@ public class CreateProductUseCase {
 
         Product product = new Product();
         product.setName(name);
+        product.setDescription(description);
         product.setPrice(price);
         product.setStockQuantity(stockQuantity);
         product.setCategory(category);
