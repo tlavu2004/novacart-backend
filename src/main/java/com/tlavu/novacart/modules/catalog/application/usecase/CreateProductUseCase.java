@@ -2,7 +2,6 @@ package com.tlavu.novacart.modules.catalog.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
-import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
@@ -26,30 +25,6 @@ public class CreateProductUseCase {
             Integer stockQuantity,
             Long categoryId
     ) {
-        if (name == null || name.isBlank()) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Product name is required"
-            );
-        }
-        if (price == null) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Product price is required"
-            );
-        }
-        if (stockQuantity == null) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Product stock quantity is required"
-            );
-        }
-        if (categoryId == null) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Category id is required"
-            );
-        }
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(
