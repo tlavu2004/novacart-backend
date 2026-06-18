@@ -1,7 +1,9 @@
 CREATE TABLE categories (
     id BIGSERIAL PRIMARY KEY,
+
     name VARCHAR(255) NOT NULL,
     description TEXT,
+
     created_at TIMESTAMPTZ NOT NULL,
     updated_at TIMESTAMPTZ NOT NULL,
     deleted_at TIMESTAMPTZ NULL,
@@ -12,11 +14,14 @@ CREATE TABLE categories (
 
 CREATE TABLE products (
     id BIGSERIAL PRIMARY KEY,
-    category_id BIGINT NOT NULL,
+
     name VARCHAR(255) NOT NULL,
     description TEXT,
     price NUMERIC(12, 2) NOT NULL,
     stock_quantity INTEGER NOT NULL,
+
+    category_id BIGINT NOT NULL,
+
     created_at TIMESTAMPTZ NOT NULL,
     updated_at TIMESTAMPTZ NOT NULL,
     deleted_at TIMESTAMPTZ NULL,
