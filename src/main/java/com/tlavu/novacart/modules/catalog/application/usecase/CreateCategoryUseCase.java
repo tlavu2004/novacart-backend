@@ -18,15 +18,17 @@ public class CreateCategoryUseCase {
             String description
     ) {
 
-        if (categoryRepository.existsByName(name)) {
+        String normalizedName = name.trim();
+
+        if (categoryRepository.existsByNameIgnoreCase(normalizedName)) {
             throw new ConflictException(
                     ErrorCode.CATEGORY_ALREADY_EXISTS,
-                    "Category '%s' already exists".formatted(name)
+                    "Category '%s' already exists".formatted(normalizedName)
             );
         }
 
         Category category = new Category();
-        category.setName(name);
+        category.setName(normalizedName);
         category.setDescription(description);
 
         return categoryRepository.save(category);

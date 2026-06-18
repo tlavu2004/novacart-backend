@@ -2,7 +2,6 @@ package com.tlavu.novacart.modules.catalog.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
-import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
@@ -22,32 +21,18 @@ public class CreateProductUseCase {
 
     public Product execute(
             String name,
+            String description,
             BigDecimal price,
             Integer stockQuantity,
             Long categoryId
     ) {
-        if (name == null || name.isBlank()) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Product name is required"
-            );
-        }
-        if (price == null) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Product price is required"
-            );
-        }
-        if (stockQuantity == null) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Product stock quantity is required"
-            );
-        }
-        if (categoryId == null) {
-            throw new ValidationException(
-                    ErrorCode.VALIDATION_FAILED,
-                    "Category id is required"
+
+        String normalizedName = name.trim();
+
+        if (productRepository.existsByNameIgnoreCase(normalizedName)) {
+            throw new ConflictException(
+                    ErrorCode.PRODUCT_ALREADY_EXISTS,
+                    "Product '%s' already exists".formatted(normalizedName)
             );
         }
 
@@ -57,15 +42,9 @@ public class CreateProductUseCase {
                         "Category with id=%d not found".formatted(categoryId)
                 ));
 
-        if (productRepository.existsByName(name)) {
-            throw new ConflictException(
-                    ErrorCode.PRODUCT_ALREADY_EXISTS,
-                    "Product '%s' already exists".formatted(name)
-            );
-        }
-
         Product product = new Product();
-        product.setName(name);
+        product.setName(normalizedName);
+        product.setDescription(description);
         product.setPrice(price);
         product.setStockQuantity(stockQuantity);
         product.setCategory(category);

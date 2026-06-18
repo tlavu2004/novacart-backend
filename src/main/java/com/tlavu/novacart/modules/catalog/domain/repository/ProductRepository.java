@@ -10,5 +10,5 @@ public interface ProductRepository {
 
     Optional<Product> findById(Long id);
 
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 }

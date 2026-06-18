@@ -16,16 +16,19 @@ public class ProductPersistenceAdapter implements ProductRepository {
 
     @Override
     public Product save(Product product) {
+
         return productJpaRepository.save(product);
     }
 
     @Override
     public Optional<Product> findById(Long id) {
+
         return productJpaRepository.findById(id);
     }
 
     @Override
-    public boolean existsByName(String name) {
-        return productJpaRepository.existsByName(name);
+    public boolean existsByNameIgnoreCase(String name) {
+
+        return productJpaRepository.existsByNameIgnoreCase(name);
     }
 }

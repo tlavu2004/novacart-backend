@@ -6,6 +6,7 @@ import com.tlavu.novacart.modules.catalog.application.usecase.ListCategoriesUseC
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.CategoryResponse;
+import com.tlavu.novacart.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,18 +25,18 @@ public class CategoryController {
     private final CreateCategoryUseCase createCategoryUseCase;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryById(
+    public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
             @PathVariable Long id
     ) {
 
         Category category = getCategoryByIdUseCase.execute(id);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(CategoryResponse.from(category));
+                .body(ApiResponse.success(CategoryResponse.from(category)));
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> listCategories() {
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> listCategories() {
 
         List<Category> categories = listCategoriesUseCase.execute();
 
@@ -44,11 +45,11 @@ public class CategoryController {
                 .toList();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+                .body(ApiResponse.success(response));
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> createCategory(
+    public ResponseEntity<ApiResponse<CategoryResponse>> createCategory(
             @Valid
             @RequestBody
             CreateCategoryRequest request
@@ -60,6 +61,6 @@ public class CategoryController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(CategoryResponse.from(category));
+                .body(ApiResponse.success(CategoryResponse.from(category)));
     }
 }
