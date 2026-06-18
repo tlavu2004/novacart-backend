@@ -1,5 +1,7 @@
 package com.tlavu.novacart.modules.catalog.presentation.advice;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -102,10 +105,29 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
 
+        String message = "Malformed JSON request";
+
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof InvalidFormatException ife && !ife.getPath().isEmpty()) {
+            String fieldName = ife.getPath()
+                    .stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining("."));
+
+            String invalidValue = String.valueOf(ife.getValue());
+
+            String expectedType = ife.getTargetType().getSimpleName();
+
+            message = "Invalid value '%s' for field '%s', expected type: %s"
+                    .formatted(invalidValue, fieldName, expectedType);
+        }
+
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 ErrorCode.VALIDATION_FAILED,
-                "Malformed JSON request",
+                message,
                 request,
                 null,
                 ex
