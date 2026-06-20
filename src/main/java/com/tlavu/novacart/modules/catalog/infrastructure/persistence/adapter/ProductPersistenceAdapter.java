@@ -6,6 +6,7 @@ import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.Product
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -24,6 +25,12 @@ public class ProductPersistenceAdapter implements ProductRepository {
     public Optional<Product> findById(Long id) {
 
         return productJpaRepository.findById(id);
+    }
+
+    @Override
+    public List<Product> findAll() {
+
+        return productJpaRepository.findAll();
     }
 
     @Override
