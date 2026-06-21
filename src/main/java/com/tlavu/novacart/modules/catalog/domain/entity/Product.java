@@ -1,5 +1,6 @@
 package com.tlavu.novacart.modules.catalog.domain.entity;
 
+import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,13 @@ public class Product {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
+    @Column(name = "slug", nullable = false)
+    private String slug;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status = ProductStatus.DRAFT;
+
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
@@ -47,6 +55,7 @@ public class Product {
 
     @PrePersist
     protected void onCreate() {
+
         Instant now = Instant.now();
         createdAt = now;
         updatedAt = now;
@@ -54,6 +63,7 @@ public class Product {
 
     @PreUpdate
     protected void onUpdate() {
+
         updatedAt = Instant.now();
     }
 }

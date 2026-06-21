@@ -25,6 +25,12 @@ public class Category {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
+    @Column(name = "slug", nullable = false)
+    private String slug;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
@@ -36,6 +42,7 @@ public class Category {
 
     @PrePersist
     protected void onCreate() {
+
         Instant now = Instant.now();
         createdAt = now;
         updatedAt = now;
@@ -43,6 +50,7 @@ public class Category {
 
     @PreUpdate
     protected void onUpdate() {
+
         updatedAt = Instant.now();
     }
 }
