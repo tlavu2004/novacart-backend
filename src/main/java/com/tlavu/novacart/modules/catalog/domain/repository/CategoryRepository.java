@@ -14,4 +14,6 @@ public interface CategoryRepository {
     List<Category> findAll();
 
     boolean existsByNameIgnoreCase(String name);
+
+    boolean existsBySlug(String slug);
 }

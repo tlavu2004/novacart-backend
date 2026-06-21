@@ -7,6 +7,8 @@ import java.time.Instant;
 public record CategoryResponse (
         Long id,
         String name,
+        String slug,
+        boolean isActive,
         String description,
         Instant createdAt,
         Instant updatedAt
@@ -16,6 +18,8 @@ public record CategoryResponse (
         return new CategoryResponse(
                 category.getId(),
                 category.getName(),
+                category.getSlug(),
+                category.isActive(),
                 category.getDescription(),
                 category.getCreatedAt(),
                 category.getUpdatedAt()

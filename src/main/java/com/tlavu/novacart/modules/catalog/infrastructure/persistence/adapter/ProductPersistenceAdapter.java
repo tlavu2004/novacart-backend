@@ -38,4 +38,10 @@ public class ProductPersistenceAdapter implements ProductRepository {
 
         return productJpaRepository.existsByNameIgnoreCase(name);
     }
+
+    @Override
+    public boolean existsBySlug(String slug) {
+
+        return productJpaRepository.existsBySlug(slug);
+    }
 }

@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ProductJpaRepository extends JpaRepository<Product, Long> {
 
     boolean existsByNameIgnoreCase(String name);
+
+    boolean existsBySlug(String slug);
 }

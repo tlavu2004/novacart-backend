@@ -38,4 +38,10 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
 
         return categoryJpaRepository.existsByNameIgnoreCase(name);
     }
+
+    @Override
+    public boolean existsBySlug(String slug) {
+
+        return categoryJpaRepository.existsBySlug(slug);
+    }
 }
