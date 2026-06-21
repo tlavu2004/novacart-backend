@@ -8,6 +8,6 @@ public record CreateCategoryRequest (
         @Size(max = 255, message = "Category name must not exceed 255 characters")
         String name,
 
-        @Size(max = 1000)
+        @Size(max = 1000, message = "Product description must not exceed 1000 characters")
         String description
 ) {}
