@@ -1,9 +1,6 @@
 package com.tlavu.novacart.modules.catalog.presentation.controller;
 
-import com.tlavu.novacart.modules.catalog.application.usecase.CreateCategoryUseCase;
-import com.tlavu.novacart.modules.catalog.application.usecase.GetCategoryByIdUseCase;
-import com.tlavu.novacart.modules.catalog.application.usecase.ListCategoriesUseCase;
-import com.tlavu.novacart.modules.catalog.application.usecase.UpdateCategoryUseCase;
+import com.tlavu.novacart.modules.catalog.application.usecase.*;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateCategoryRequest;
@@ -26,6 +23,7 @@ public class CategoryController {
     private final ListCategoriesUseCase listCategoriesUseCase;
     private final CreateCategoryUseCase createCategoryUseCase;
     private final UpdateCategoryUseCase updateCategoryUseCase;
+    private final DeleteCategoryUseCase deleteCategoryUseCase;
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
@@ -86,5 +84,16 @@ public class CategoryController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(CategoryResponse.from(category)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteCategory(
+            @PathVariable Long id
+    ) {
+
+        deleteCategoryUseCase.execute(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
