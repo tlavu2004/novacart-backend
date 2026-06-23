@@ -1,8 +1,10 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
+import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
+import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.time.Instant;
 public class DeleteCategoryUseCase {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     public void execute(Long id) {
 
@@ -22,6 +25,13 @@ public class DeleteCategoryUseCase {
                         ErrorCode.CATEGORY_NOT_FOUND,
                         "Category with id=%d not found".formatted(id)
                 ));
+
+        if (productRepository.existsByCategoryId(id)) {
+            throw new ConflictException(
+                    ErrorCode.CATEGORY_HAS_ACTIVE_PRODUCTS,
+                    "Category with id=%d still has active products".formatted(id)
+            );
+        }
 
         Instant now = Instant.now();
 

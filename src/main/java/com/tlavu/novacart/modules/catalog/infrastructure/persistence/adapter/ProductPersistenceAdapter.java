@@ -44,4 +44,10 @@ public class ProductPersistenceAdapter implements ProductRepository {
 
         return productJpaRepository.existsBySlug(slug);
     }
+
+    @Override
+    public boolean existsByCategoryId(Long id) {
+
+        return productJpaRepository.existsByCategoryId(id);
+    }
 }

@@ -16,4 +16,6 @@ public interface ProductRepository {
     boolean existsByNameIgnoreCase(String name);
 
     boolean existsBySlug(String slug);
+
+    boolean existsByCategoryId(Long id);
 }
