@@ -44,4 +44,16 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
 
         return categoryJpaRepository.existsBySlug(slug);
     }
+
+    @Override
+    public boolean existsByNameIgnoreCaseAndIdNot(String name, Long id) {
+
+        return categoryJpaRepository.existsByNameIgnoreCaseAndIdNot(name, id);
+    }
+
+    @Override
+    public boolean existsBySlugAndIdNot(String slug, Long id) {
+
+        return categoryJpaRepository.existsBySlugAndIdNot(slug, id);
+    }
 }

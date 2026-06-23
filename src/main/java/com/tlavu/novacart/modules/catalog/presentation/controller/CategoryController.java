@@ -3,8 +3,10 @@ package com.tlavu.novacart.modules.catalog.presentation.controller;
 import com.tlavu.novacart.modules.catalog.application.usecase.CreateCategoryUseCase;
 import com.tlavu.novacart.modules.catalog.application.usecase.GetCategoryByIdUseCase;
 import com.tlavu.novacart.modules.catalog.application.usecase.ListCategoriesUseCase;
+import com.tlavu.novacart.modules.catalog.application.usecase.UpdateCategoryUseCase;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateCategoryRequest;
+import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.CategoryResponse;
 import com.tlavu.novacart.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
@@ -23,6 +25,7 @@ public class CategoryController {
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;
     private final ListCategoriesUseCase listCategoriesUseCase;
     private final CreateCategoryUseCase createCategoryUseCase;
+    private final UpdateCategoryUseCase updateCategoryUseCase;
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
@@ -61,6 +64,27 @@ public class CategoryController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(CategoryResponse.from(category)));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(
+            @PathVariable
+            Long id,
+
+            @Valid
+            @RequestBody
+            UpdateCategoryRequest request
+    ) {
+
+        Category category = updateCategoryUseCase.execute(
+                id,
+                request.name(),
+                request.description(),
+                request.active()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(CategoryResponse.from(category)));
     }
 }

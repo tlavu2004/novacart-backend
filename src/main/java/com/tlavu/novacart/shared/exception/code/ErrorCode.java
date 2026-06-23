@@ -16,6 +16,7 @@ public enum ErrorCode {
     PRODUCT_SLUG_ALREADY_EXISTS("PROD_003", "Product slug already exists"),
 
     VALIDATION_FAILED("VAL_001", "Validation failed"),
+    INVALID_INPUT("VAL_002", "Invalid input"),
 
     INTERNAL_SERVER_ERROR("SYS_500", "Internal server error");
 

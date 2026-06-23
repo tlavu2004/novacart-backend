@@ -8,7 +8,7 @@ public record CategoryResponse (
         Long id,
         String name,
         String slug,
-        boolean isActive,
+        boolean active,
         String description,
         Instant createdAt,
         Instant updatedAt
