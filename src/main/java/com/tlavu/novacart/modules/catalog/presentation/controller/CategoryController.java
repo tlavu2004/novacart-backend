@@ -27,7 +27,8 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
-            @PathVariable Long id
+            @PathVariable
+            Long id
     ) {
 
         Category category = getCategoryByIdUseCase.execute(id);
@@ -88,7 +89,8 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteCategory(
-            @PathVariable Long id
+            @PathVariable
+            Long id
     ) {
 
         deleteCategoryUseCase.execute(id);

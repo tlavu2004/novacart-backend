@@ -27,10 +27,12 @@ public class ProductController {
     private final UpdateProductUseCase updateProductUseCase;
     private final UpdateProductStatusUseCase updateProductStatusUseCase;
     private final UpdateProductStockUseCase updateProductStockUseCase;
+    private final DeleteProductUseCase deleteProductUseCase;
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponse>> getProductById(
-            @PathVariable Long id
+            @PathVariable
+            Long id
     ) {
 
         Product product = getProductByIdUseCase.execute(id);
@@ -129,5 +131,17 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(ProductResponse.from(product)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteProduct(
+            @PathVariable
+            Long id
+    ) {
+
+        deleteProductUseCase.execute(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
