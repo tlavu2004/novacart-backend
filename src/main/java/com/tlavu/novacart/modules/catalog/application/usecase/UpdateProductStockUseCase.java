@@ -4,9 +4,9 @@ import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFound
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
