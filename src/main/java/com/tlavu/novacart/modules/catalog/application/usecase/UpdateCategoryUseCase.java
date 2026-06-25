@@ -30,24 +30,29 @@ public class UpdateCategoryUseCase {
                 ));
 
         if (name != null) {
+
             String normalizedName = name.trim();
+
             if (normalizedName.isEmpty()) {
+
                 throw new InvalidInputException(
                         ErrorCode.INVALID_INPUT,
                         "Category name must not be blank"
                 );
             }
 
-            String slug = SlugUtils.generate(normalizedName);
-
             if (categoryRepository.existsByNameIgnoreCaseAndIdNot(normalizedName, id)) {
+
                 throw new ConflictException(
                         ErrorCode.CATEGORY_ALREADY_EXISTS,
                         "Category '%s' already exists".formatted(normalizedName)
                 );
             }
 
+            String slug = SlugUtils.generate(normalizedName);
+
             if (categoryRepository.existsBySlugAndIdNot(slug, id)) {
+
                 throw new ConflictException(
                         ErrorCode.CATEGORY_SLUG_ALREADY_EXISTS,
                         "Category with slug '%s' already exists".formatted(slug)
@@ -59,10 +64,12 @@ public class UpdateCategoryUseCase {
         }
 
         if (description != null) {
+
             category.setDescription(description);
         }
 
         if (active != null) {
+
             category.setActive(active);
         }
 

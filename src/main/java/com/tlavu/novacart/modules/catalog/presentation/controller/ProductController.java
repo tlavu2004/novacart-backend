@@ -1,10 +1,11 @@
 package com.tlavu.novacart.modules.catalog.presentation.controller;
 
-import com.tlavu.novacart.modules.catalog.application.usecase.CreateProductUseCase;
-import com.tlavu.novacart.modules.catalog.application.usecase.GetProductByIdUseCase;
-import com.tlavu.novacart.modules.catalog.application.usecase.ListProductsUseCase;
+import com.tlavu.novacart.modules.catalog.application.usecase.*;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateProductRequest;
+import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductRequest;
+import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductStatusRequest;
+import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductStockRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.ProductResponse;
 import com.tlavu.novacart.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
@@ -23,6 +24,9 @@ public class ProductController {
     private final GetProductByIdUseCase getProductByIdUseCase;
     private final ListProductsUseCase listProductsUseCase;
     private final CreateProductUseCase createProductUseCase;
+    private final UpdateProductUseCase updateProductUseCase;
+    private final UpdateProductStatusUseCase updateProductStatusUseCase;
+    private final UpdateProductStockUseCase updateProductStockUseCase;
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponse>> getProductById(
@@ -64,6 +68,66 @@ public class ProductController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(ProductResponse.from(product)));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(
+            @PathVariable
+            Long id,
+
+            @Valid
+            @RequestBody
+            UpdateProductRequest request
+    ) {
+
+        Product product = updateProductUseCase.execute(
+                id,
+                request.name(),
+                request.description(),
+                request.price(),
+                request.categoryId()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(ProductResponse.from(product)));
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ApiResponse<ProductResponse>> updateProductStatus(
+            @PathVariable
+            Long id,
+
+            @Valid
+            @RequestBody
+            UpdateProductStatusRequest request
+    ) {
+
+        Product product = updateProductStatusUseCase.execute(
+                id,
+                request.status()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(ProductResponse.from(product)));
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<ApiResponse<ProductResponse>> updateProductStock(
+            @PathVariable
+            Long id,
+
+            @Valid
+            @RequestBody
+            UpdateProductStockRequest request
+    ) {
+
+        Product product = updateProductStockUseCase.execute(
+                id,
+                request.stockQuantity()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(ProductResponse.from(product)));
     }
 }

@@ -4,5 +4,12 @@ public enum ProductStatus {
 
     DRAFT,
     ACTIVE,
-    INACTIVE
+    INACTIVE;
+
+    public boolean canTransitionTo(ProductStatus target) {
+        return switch (this) {
+            case DRAFT, INACTIVE -> target == ACTIVE;
+            case ACTIVE -> target == INACTIVE;
+        };
+    }
 }
