@@ -38,4 +38,26 @@ public class ProductPersistenceAdapter implements ProductRepository {
 
         return productJpaRepository.existsByNameIgnoreCase(name);
     }
+
+    @Override
+    public boolean existsBySlug(String slug) {
+
+        return productJpaRepository.existsBySlug(slug);
+    }
+
+    public boolean existsByNameIgnoreCaseAndIdNot(String name, Long id) {
+
+        return productJpaRepository.existsByNameIgnoreCaseAndIdNot(name, id);
+    }
+
+    public boolean existsBySlugAndIdNot(String name, Long id) {
+
+        return productJpaRepository.existsBySlugAndIdNot(name, id);
+    }
+
+    @Override
+    public boolean existsByCategoryId(Long id) {
+
+        return productJpaRepository.existsByCategoryId(id);
+    }
 }

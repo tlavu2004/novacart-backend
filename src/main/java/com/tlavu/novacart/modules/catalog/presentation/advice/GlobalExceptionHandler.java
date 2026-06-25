@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
-import com.tlavu.novacart.modules.catalog.application.exception.ValidationException;
+import com.tlavu.novacart.modules.catalog.application.exception.InvalidInputException;
 import com.tlavu.novacart.shared.dto.ApiResponse;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import com.tlavu.novacart.shared.dto.ApiError;
@@ -83,9 +83,9 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler(InvalidInputException.class)
     public ResponseEntity<ApiResponse<Void>> handleValidation(
-            ValidationException ex,
+            InvalidInputException ex,
             HttpServletRequest request
     ) {
 

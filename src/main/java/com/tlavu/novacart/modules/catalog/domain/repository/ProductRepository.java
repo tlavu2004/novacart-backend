@@ -14,4 +14,12 @@ public interface ProductRepository {
     List<Product> findAll();
 
     boolean existsByNameIgnoreCase(String name);
+
+    boolean existsBySlug(String slug);
+
+    boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
+
+    boolean existsBySlugAndIdNot(String name, Long id);
+
+    boolean existsByCategoryId(Long id);
 }

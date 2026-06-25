@@ -4,16 +4,20 @@ import com.tlavu.novacart.modules.catalog.application.exception.ConflictExceptio
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
+import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
+import com.tlavu.novacart.shared.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CreateProductUseCase {
 
     private final ProductRepository productRepository;
@@ -28,11 +32,19 @@ public class CreateProductUseCase {
     ) {
 
         String normalizedName = name.trim();
+        String slug = SlugUtils.generate(normalizedName);
 
         if (productRepository.existsByNameIgnoreCase(normalizedName)) {
             throw new ConflictException(
                     ErrorCode.PRODUCT_ALREADY_EXISTS,
                     "Product '%s' already exists".formatted(normalizedName)
+            );
+        }
+
+        if (productRepository.existsBySlug(slug)) {
+            throw new ConflictException(
+                    ErrorCode.PRODUCT_SLUG_ALREADY_EXISTS,
+                    "Product with slug '%s' already exists".formatted(slug)
             );
         }
 
@@ -46,6 +58,8 @@ public class CreateProductUseCase {
         product.setName(normalizedName);
         product.setDescription(description);
         product.setPrice(price);
+        product.setSlug(slug);
+        product.setStatus(ProductStatus.DRAFT);
         product.setStockQuantity(stockQuantity);
         product.setCategory(category);
 

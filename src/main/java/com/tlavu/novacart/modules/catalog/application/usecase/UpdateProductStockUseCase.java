@@ -11,16 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class GetProductByIdUseCase {
+public class UpdateProductStockUseCase {
 
     private final ProductRepository productRepository;
 
-    public Product execute(Long id) {
+    public Product execute(Long id, Integer stockQuantity) {
 
-        return productRepository.findById(id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         ErrorCode.PRODUCT_NOT_FOUND,
-                        "Product with id=%d not found".formatted(id)
-                ));
+                        "Product with id=%d not found".formatted(id))
+                );
+
+        product.setStockQuantity(stockQuantity);
+
+        return productRepository.save(product);
     }
 }
