@@ -8,7 +8,7 @@ import com.tlavu.novacart.modules.catalog.application.exception.InvalidInputExce
 import com.tlavu.novacart.shared.dto.response.ApiResponse;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import com.tlavu.novacart.shared.dto.error.ApiError;
-import com.tlavu.novacart.shared.dto.response.FieldErrorResponse;
+import com.tlavu.novacart.shared.dto.error.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
