@@ -1,4 +1,6 @@
-package com.tlavu.novacart.shared.dto;
+package com.tlavu.novacart.shared.dto.error;
+
+import com.tlavu.novacart.shared.dto.response.FieldErrorResponse;
 
 import java.util.List;
 

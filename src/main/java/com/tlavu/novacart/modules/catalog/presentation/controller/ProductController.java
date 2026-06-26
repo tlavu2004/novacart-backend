@@ -7,7 +7,7 @@ import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProduct
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductStatusRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductStockRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.ProductResponse;
-import com.tlavu.novacart.shared.dto.ApiResponse;
+import com.tlavu.novacart.shared.dto.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
