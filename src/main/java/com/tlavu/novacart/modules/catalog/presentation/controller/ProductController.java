@@ -2,19 +2,21 @@ package com.tlavu.novacart.modules.catalog.presentation.controller;
 
 import com.tlavu.novacart.modules.catalog.application.usecase.*;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateProductRequest;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductRequest;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductStatusRequest;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateProductStockRequest;
+import com.tlavu.novacart.modules.catalog.infrastructure.validation.SortValidator;
+import com.tlavu.novacart.modules.catalog.presentation.dto.request.*;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.ProductResponse;
 import com.tlavu.novacart.shared.dto.response.ApiResponse;
+import com.tlavu.novacart.shared.dto.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -29,6 +31,14 @@ public class ProductController {
     private final UpdateProductStockUseCase updateProductStockUseCase;
     private final DeleteProductUseCase deleteProductUseCase;
 
+    private static final Set<String> ALLOWED_SORT_PROPERTIES = Set.of(
+            "name",
+            "price",
+            "stockQuantity",
+            "createdAt",
+            "updatedAt"
+    );
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponse>> getProductById(
             @PathVariable
@@ -42,13 +52,27 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProductResponse>>> listProducts() {
+    public ResponseEntity<ApiResponse<PageResponse<ProductResponse>>> listProducts(
+            @ModelAttribute ProductFilterRequest filter,
+            Pageable pageable
+    ) {
 
-        List<Product> products = listProductsUseCase.execute();
+        SortValidator.validate(pageable, ALLOWED_SORT_PROPERTIES);
 
-        List<ProductResponse> response = products.stream()
+        Page<Product> pages = listProductsUseCase.execute(filter, pageable);
+
+        List<ProductResponse> content = pages.getContent()
+                .stream()
                 .map(ProductResponse::from)
                 .toList();
+
+        PageResponse<ProductResponse> response = new PageResponse<>(
+                content,
+                pages.getNumber(),
+                pages.getSize(),
+                pages.getTotalElements(),
+                pages.getTotalPages()
+        );
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(response));

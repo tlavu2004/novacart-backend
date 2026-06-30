@@ -4,9 +4,11 @@ import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.ProductJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -28,9 +30,9 @@ public class ProductPersistenceAdapter implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAll() {
+    public Page<Product> findAll(Specification<Product> specification, Pageable pageable) {
 
-        return productJpaRepository.findAll();
+        return productJpaRepository.findAll(specification, pageable);
     }
 
     @Override
