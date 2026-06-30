@@ -1,4 +1,4 @@
-package com.tlavu.novacart.shared.util;
+package com.tlavu.novacart.modules.catalog.infrastructure.util;
 
 import java.text.Normalizer;
 
