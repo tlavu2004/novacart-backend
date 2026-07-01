@@ -1,12 +1,13 @@
 package com.tlavu.novacart.modules.catalog.infrastructure.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.text.Normalizer;
 
+@UtilityClass
 public class SlugUtils {
 
-    private SlugUtils() {}
-
-    public static String generate(String input) {
+    public String generate(String input) {
         if (input == null) return "";
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
         return normalized
