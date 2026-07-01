@@ -143,7 +143,7 @@ public class GlobalExceptionHandler {
 
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.INVALID_SORT_FIELD,
+                ex.getErrorCode(),
                 safeMessage(ex),
                 request,
                 null,
