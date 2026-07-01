@@ -5,9 +5,12 @@ import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.CategoryResponse;
-import com.tlavu.novacart.shared.dto.ApiResponse;
+import com.tlavu.novacart.shared.dto.response.ApiResponse;
+import com.tlavu.novacart.shared.dto.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +41,22 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CategoryResponse>>> listCategories() {
+    public ResponseEntity<ApiResponse<PageResponse<CategoryResponse>>> listCategories(Pageable pageable) {
 
-        List<Category> categories = listCategoriesUseCase.execute();
+        Page<Category> pages = listCategoriesUseCase.execute(pageable);
 
-        List<CategoryResponse> response = categories.stream()
+        List<CategoryResponse> content = pages.getContent()
+                .stream()
                 .map(CategoryResponse::from)
                 .toList();
+
+        PageResponse<CategoryResponse> response = new PageResponse<>(
+                content,
+                pages.getNumber(),
+                pages.getSize(),
+                pages.getTotalElements(),
+                pages.getTotalPages()
+        );
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(response));

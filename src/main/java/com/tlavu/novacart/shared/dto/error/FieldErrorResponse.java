@@ -1,4 +1,4 @@
-package com.tlavu.novacart.shared.dto;
+package com.tlavu.novacart.shared.dto.error;
 
 public record FieldErrorResponse(
         String field,

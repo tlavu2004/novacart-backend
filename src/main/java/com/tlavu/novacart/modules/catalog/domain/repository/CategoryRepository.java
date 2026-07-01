@@ -1,8 +1,9 @@
 package com.tlavu.novacart.modules.catalog.domain.repository;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository {
@@ -11,7 +12,8 @@ public interface CategoryRepository {
 
     Optional<Category> findById(Long id);
 
-    List<Category> findAll();
+    // TODO: Page/Pageable couples domain to Spring Data. Consider domain-level paging abstraction if needed.
+    Page<Category> findAll(Pageable pageable);
 
     boolean existsByNameIgnoreCase(String name);
 

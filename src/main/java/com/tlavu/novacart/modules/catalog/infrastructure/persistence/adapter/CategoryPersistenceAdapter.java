@@ -4,9 +4,10 @@ import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.CategoryJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -28,9 +29,9 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
     }
 
     @Override
-    public List<Category> findAll() {
+    public Page<Category> findAll(Pageable pageable) {
 
-        return categoryJpaRepository.findAll();
+        return categoryJpaRepository.findAll(pageable);
     }
 
     @Override

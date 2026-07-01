@@ -3,12 +3,13 @@ package com.tlavu.novacart.modules.catalog.presentation.advice;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
+import com.tlavu.novacart.modules.catalog.application.exception.InvalidSortFieldException;
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.application.exception.InvalidInputException;
-import com.tlavu.novacart.shared.dto.ApiResponse;
+import com.tlavu.novacart.shared.dto.response.ApiResponse;
 import com.tlavu.novacart.shared.exception.code.ErrorCode;
-import com.tlavu.novacart.shared.dto.ApiError;
-import com.tlavu.novacart.shared.dto.FieldErrorResponse;
+import com.tlavu.novacart.shared.dto.error.ApiError;
+import com.tlavu.novacart.shared.dto.error.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -128,6 +129,22 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 ErrorCode.VALIDATION_FAILED,
                 message,
+                request,
+                null,
+                ex
+        );
+    }
+
+    @ExceptionHandler(InvalidSortFieldException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidSortField(
+            InvalidSortFieldException ex,
+            HttpServletRequest request
+    ) {
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getErrorCode(),
+                safeMessage(ex),
                 request,
                 null,
                 ex

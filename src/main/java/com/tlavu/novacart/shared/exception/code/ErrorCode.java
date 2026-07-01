@@ -19,6 +19,7 @@ public enum ErrorCode {
 
     VALIDATION_FAILED("VAL_001", "Validation failed"),
     INVALID_INPUT("VAL_002", "Invalid input"),
+    INVALID_SORT_FIELD("VAL_003", "Invalid sort field"),
 
     INTERNAL_SERVER_ERROR("SYS_500", "Internal server error");
 

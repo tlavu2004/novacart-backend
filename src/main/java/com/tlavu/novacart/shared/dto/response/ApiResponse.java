@@ -1,6 +1,7 @@
-package com.tlavu.novacart.shared.dto;
+package com.tlavu.novacart.shared.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tlavu.novacart.shared.dto.error.ApiError;
 
 import java.time.Instant;
 
