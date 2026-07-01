@@ -12,6 +12,7 @@ public interface CategoryRepository {
 
     Optional<Category> findById(Long id);
 
+    // TODO: Page/Pageable couples domain to Spring Data. Consider domain-level paging abstraction if needed.
     Page<Category> findAll(Pageable pageable);
 
     boolean existsByNameIgnoreCase(String name);
