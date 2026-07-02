@@ -1,4 +1,4 @@
-package com.tlavu.novacart.shared.dto.error;
+package com.tlavu.novacart.shared.presentation.dto.error;
 
 import java.util.List;
 

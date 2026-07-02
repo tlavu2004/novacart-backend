@@ -1,4 +1,4 @@
-package com.tlavu.novacart.shared.exception.code;
+package com.tlavu.novacart.shared.application.exception.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

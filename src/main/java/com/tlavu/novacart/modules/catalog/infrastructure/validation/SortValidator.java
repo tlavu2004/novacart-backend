@@ -1,7 +1,7 @@
 package com.tlavu.novacart.modules.catalog.infrastructure.validation;
 
 import com.tlavu.novacart.modules.catalog.application.exception.InvalidSortFieldException;
-import com.tlavu.novacart.shared.exception.code.ErrorCode;
+import com.tlavu.novacart.shared.application.exception.code.ErrorCode;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Pageable;
 

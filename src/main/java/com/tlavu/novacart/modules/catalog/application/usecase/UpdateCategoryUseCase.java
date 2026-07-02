@@ -5,7 +5,7 @@ import com.tlavu.novacart.modules.catalog.application.exception.InvalidInputExce
 import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
-import com.tlavu.novacart.shared.exception.code.ErrorCode;
+import com.tlavu.novacart.shared.application.exception.code.ErrorCode;
 import com.tlavu.novacart.modules.catalog.infrastructure.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
