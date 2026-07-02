@@ -2,12 +2,13 @@ package com.tlavu.novacart.shared.presentation.advice;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.tlavu.novacart.shared.application.exception.code.contract.ErrorCode;
+import com.tlavu.novacart.shared.application.exception.code.global.GlobalErrorCode;
 import com.tlavu.novacart.shared.application.exception.common.ConflictException;
 import com.tlavu.novacart.shared.application.exception.common.InvalidSortFieldException;
 import com.tlavu.novacart.shared.application.exception.common.ResourceNotFoundException;
 import com.tlavu.novacart.shared.application.exception.common.InvalidInputException;
 import com.tlavu.novacart.shared.presentation.dto.response.ApiResponse;
-import com.tlavu.novacart.shared.application.exception.code.ErrorCode;
 import com.tlavu.novacart.shared.presentation.dto.error.ApiError;
 import com.tlavu.novacart.shared.presentation.dto.error.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,8 +45,8 @@ public class GlobalExceptionHandler {
 
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.VALIDATION_FAILED,
-                ErrorCode.VALIDATION_FAILED.getDefaultMessage(),
+                GlobalErrorCode.VALIDATION_FAILED,
+                GlobalErrorCode.VALIDATION_FAILED.getDefaultMessage(),
                 request,
                 errors,
                 ex
@@ -127,7 +128,7 @@ public class GlobalExceptionHandler {
 
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.VALIDATION_FAILED,
+                GlobalErrorCode.VALIDATION_FAILED,
                 message,
                 request,
                 null,
@@ -160,8 +161,8 @@ public class GlobalExceptionHandler {
 
         return buildErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                ErrorCode.INTERNAL_SERVER_ERROR,
-                ErrorCode.INTERNAL_SERVER_ERROR.getDefaultMessage(),
+                GlobalErrorCode.INTERNAL_SERVER_ERROR,
+                GlobalErrorCode.INTERNAL_SERVER_ERROR.getDefaultMessage(),
                 request,
                 null,
                 ex

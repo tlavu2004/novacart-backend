@@ -1,7 +1,7 @@
 package com.tlavu.novacart.modules.catalog.infrastructure.validation;
 
+import com.tlavu.novacart.shared.application.exception.code.global.GlobalErrorCode;
 import com.tlavu.novacart.shared.application.exception.common.InvalidSortFieldException;
-import com.tlavu.novacart.shared.application.exception.code.ErrorCode;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +15,7 @@ public class SortValidator {
         pageable.getSort().forEach(order -> {
             if (!allowedSortProperties.contains(order.getProperty())) {
                 throw new InvalidSortFieldException(
-                        ErrorCode.INVALID_SORT_FIELD,
+                        GlobalErrorCode.INVALID_SORT_FIELD,
                         "Invalid sort field: '%s'. Allowed: %s".formatted(order.getProperty(), allowedSortProperties)
                 );
             }

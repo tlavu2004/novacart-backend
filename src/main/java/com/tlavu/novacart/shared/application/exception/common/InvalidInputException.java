@@ -1,7 +1,7 @@
 package com.tlavu.novacart.shared.application.exception.common;
 
 import com.tlavu.novacart.shared.application.exception.base.BaseException;
-import com.tlavu.novacart.shared.application.exception.code.ErrorCode;
+import com.tlavu.novacart.shared.application.exception.code.contract.ErrorCode;
 
 public class InvalidInputException extends BaseException {
 
