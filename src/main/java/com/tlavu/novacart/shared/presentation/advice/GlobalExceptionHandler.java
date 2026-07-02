@@ -2,10 +2,10 @@ package com.tlavu.novacart.shared.presentation.advice;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
-import com.tlavu.novacart.modules.catalog.application.exception.InvalidSortFieldException;
-import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
-import com.tlavu.novacart.modules.catalog.application.exception.InvalidInputException;
+import com.tlavu.novacart.shared.application.exception.common.ConflictException;
+import com.tlavu.novacart.shared.application.exception.common.InvalidSortFieldException;
+import com.tlavu.novacart.shared.application.exception.common.ResourceNotFoundException;
+import com.tlavu.novacart.shared.application.exception.common.InvalidInputException;
 import com.tlavu.novacart.shared.presentation.dto.response.ApiResponse;
 import com.tlavu.novacart.shared.application.exception.code.ErrorCode;
 import com.tlavu.novacart.shared.presentation.dto.error.ApiError;

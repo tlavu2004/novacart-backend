@@ -1,4 +1,4 @@
-package com.tlavu.novacart.modules.catalog.application.exception;
+package com.tlavu.novacart.shared.application.exception.common;
 
 import com.tlavu.novacart.shared.application.exception.base.BaseException;
 import com.tlavu.novacart.shared.application.exception.code.ErrorCode;

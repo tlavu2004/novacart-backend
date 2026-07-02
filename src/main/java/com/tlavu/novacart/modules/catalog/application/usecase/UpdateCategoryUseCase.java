@@ -1,8 +1,8 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
-import com.tlavu.novacart.modules.catalog.application.exception.InvalidInputException;
-import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
+import com.tlavu.novacart.shared.application.exception.common.ConflictException;
+import com.tlavu.novacart.shared.application.exception.common.InvalidInputException;
+import com.tlavu.novacart.shared.application.exception.common.ResourceNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import com.tlavu.novacart.shared.application.exception.code.ErrorCode;
