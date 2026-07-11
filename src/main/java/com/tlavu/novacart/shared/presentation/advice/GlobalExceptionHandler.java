@@ -2,6 +2,7 @@ package com.tlavu.novacart.shared.presentation.advice;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.tlavu.novacart.shared.application.exception.base.BaseException;
 import com.tlavu.novacart.shared.application.exception.code.contract.ErrorCode;
 import com.tlavu.novacart.shared.application.exception.code.global.GlobalErrorCode;
 import com.tlavu.novacart.shared.application.exception.common.ConflictException;
@@ -56,54 +57,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(
-            ResourceNotFoundException ex,
-            HttpServletRequest request
-    ) {
-
-        return buildErrorResponse(
-                HttpStatus.NOT_FOUND,
-                ex.getErrorCode(),
-                safeMessage(ex),
-                request,
-                null,
-                ex
-        );
-    }
-
-    @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiResponse<Void>> handleConflict(
-            ConflictException ex,
-            HttpServletRequest request
-    ) {
-
-        return buildErrorResponse(
-                HttpStatus.CONFLICT,
-                ex.getErrorCode(),
-                safeMessage(ex),
-                request,
-                null,
-                ex
-        );
-    }
-
-    @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidation(
-            InvalidInputException ex,
-            HttpServletRequest request
-    ) {
-
-        return buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                ex.getErrorCode(),
-                safeMessage(ex),
-                request,
-                null,
-                ex
-        );
-    }
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<Void>> handleHttpMessageNotReadable(
             HttpMessageNotReadableException ex,
@@ -133,22 +86,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 GlobalErrorCode.VALIDATION_FAILED,
                 message,
-                request,
-                null,
-                ex
-        );
-    }
-
-    @ExceptionHandler(InvalidSortFieldException.class)
-    public ResponseEntity<ApiResponse<Void>> handleInvalidSortField(
-            InvalidSortFieldException ex,
-            HttpServletRequest request
-    ) {
-
-        return buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                ex.getErrorCode(),
-                safeMessage(ex),
                 request,
                 null,
                 ex
@@ -205,6 +142,23 @@ public class GlobalExceptionHandler {
                 HttpStatus.METHOD_NOT_ALLOWED,
                 GlobalErrorCode.METHOD_NOT_ALLOWED,
                 message,
+                request,
+                null,
+                ex
+        );
+    }
+
+    // Fallback handler for all business exceptions (any subclass of BaseException)
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBaseException(
+            BaseException ex,
+            HttpServletRequest request
+    ) {
+
+        return buildErrorResponse(
+                ex.getStatus(),
+                ex.getErrorCode(),
+                ex.getMessage(),
                 request,
                 null,
                 ex
