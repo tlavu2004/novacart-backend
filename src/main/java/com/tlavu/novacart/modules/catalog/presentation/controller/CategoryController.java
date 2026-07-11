@@ -30,8 +30,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
-            @PathVariable
-            Long id
+            @PathVariable Long id
     ) {
 
         Category category = getCategoryByIdUseCase.execute(id);
@@ -64,9 +63,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<CategoryResponse>> createCategory(
-            @Valid
-            @RequestBody
-            CreateCategoryRequest request
+            @Valid @RequestBody CreateCategoryRequest request
     ) {
 
         Category category = createCategoryUseCase.execute(
@@ -80,12 +77,8 @@ public class CategoryController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(
-            @PathVariable
-            Long id,
-
-            @Valid
-            @RequestBody
-            UpdateCategoryRequest request
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateCategoryRequest request
     ) {
 
         Category category = updateCategoryUseCase.execute(
@@ -101,8 +94,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteCategory(
-            @PathVariable
-            Long id
+            @PathVariable Long id
     ) {
 
         deleteCategoryUseCase.execute(id);

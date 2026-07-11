@@ -41,8 +41,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponse>> getProductById(
-            @PathVariable
-            Long id
+            @PathVariable Long id
     ) {
 
         Product product = getProductByIdUseCase.execute(id);
@@ -80,9 +79,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<ProductResponse>> createProduct(
-            @Valid
-            @RequestBody
-            CreateProductRequest request
+            @Valid @RequestBody CreateProductRequest request
     ) {
 
         Product product = createProductUseCase.execute(
@@ -99,12 +96,8 @@ public class ProductController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(
-            @PathVariable
-            Long id,
-
-            @Valid
-            @RequestBody
-            UpdateProductRequest request
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateProductRequest request
     ) {
 
         Product product = updateProductUseCase.execute(
@@ -121,12 +114,8 @@ public class ProductController {
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<ProductResponse>> updateProductStatus(
-            @PathVariable
-            Long id,
-
-            @Valid
-            @RequestBody
-            UpdateProductStatusRequest request
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateProductStatusRequest request
     ) {
 
         Product product = updateProductStatusUseCase.execute(
@@ -140,12 +129,8 @@ public class ProductController {
 
     @PatchMapping("/{id}/stock")
     public ResponseEntity<ApiResponse<ProductResponse>> updateProductStock(
-            @PathVariable
-            Long id,
-
-            @Valid
-            @RequestBody
-            UpdateProductStockRequest request
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateProductStockRequest request
     ) {
 
         Product product = updateProductStockUseCase.execute(
@@ -159,8 +144,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteProduct(
-            @PathVariable
-            Long id
+            @PathVariable Long id
     ) {
 
         deleteProductUseCase.execute(id);

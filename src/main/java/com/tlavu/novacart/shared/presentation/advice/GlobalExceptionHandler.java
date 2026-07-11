@@ -16,9 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 import java.util.Objects;
@@ -146,6 +149,62 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 ex.getErrorCode(),
                 safeMessage(ex),
+                request,
+                null,
+                ex
+        );
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNoResourceFound(
+            NoResourceFoundException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                GlobalErrorCode.RESOURCE_NOT_FOUND,
+                GlobalErrorCode.RESOURCE_NOT_FOUND.getDefaultMessage(),
+                request,
+                null,
+                ex
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentTypeMismatch(
+            MethodArgumentTypeMismatchException ex,
+            HttpServletRequest request
+    ) {
+        String message = "Parameter '%s' must be of type %s".formatted(
+                ex.getName(),
+                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown"
+        );
+
+        List<FieldErrorResponse> errors = List.of(
+                new FieldErrorResponse(ex.getName(), message)
+        );
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                GlobalErrorCode.INVALID_PARAMETER_TYPE,
+                GlobalErrorCode.INVALID_PARAMETER_TYPE.getDefaultMessage(),
+                request,
+                errors,
+                ex
+        );
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMethodNotSupported(
+            HttpRequestMethodNotSupportedException ex,
+            HttpServletRequest request
+    ) {
+        String message = "Method '%s' is not supported for this endpoint".formatted(ex.getMethod());
+
+        return buildErrorResponse(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                GlobalErrorCode.METHOD_NOT_ALLOWED,
+                message,
                 request,
                 null,
                 ex
