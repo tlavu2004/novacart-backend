@@ -14,6 +14,7 @@ import com.tlavu.novacart.shared.presentation.dto.error.ApiError;
 import com.tlavu.novacart.shared.presentation.dto.error.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -142,6 +143,21 @@ public class GlobalExceptionHandler {
                 HttpStatus.METHOD_NOT_ALLOWED,
                 GlobalErrorCode.METHOD_NOT_ALLOWED,
                 message,
+                request,
+                null,
+                ex
+        );
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ApiResponse<Void>> handlePropertyReference(
+            PropertyReferenceException ex,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                GlobalErrorCode.INVALID_SORT_FIELD,
+                "Invalid sort field: %s".formatted(ex.getPropertyName()),
                 request,
                 null,
                 ex

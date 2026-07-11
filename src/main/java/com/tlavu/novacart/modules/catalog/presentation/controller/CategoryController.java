@@ -2,6 +2,7 @@ package com.tlavu.novacart.modules.catalog.presentation.controller;
 
 import com.tlavu.novacart.modules.catalog.application.usecase.*;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
+import com.tlavu.novacart.modules.catalog.infrastructure.validation.SortValidator;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.CategoryResponse;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -28,6 +30,12 @@ public class CategoryController {
     private final UpdateCategoryUseCase updateCategoryUseCase;
     private final DeleteCategoryUseCase deleteCategoryUseCase;
 
+    private static final Set<String> ALLOWED_SORT_PROPERTIES = Set.of(
+            "name",
+            "createdAt",
+            "updatedAt"
+    );
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
             @PathVariable Long id
@@ -39,8 +47,13 @@ public class CategoryController {
                 .body(ApiResponse.success(CategoryResponse.from(category)));
     }
 
+    // TODO: Consider adding CategoryFilterRequest (e.g. filter by `active`, `name`) when there's a real need — not required for current use case.
     @GetMapping
-    public ResponseEntity<ApiResponse<PageResponse<CategoryResponse>>> listCategories(Pageable pageable) {
+    public ResponseEntity<ApiResponse<PageResponse<CategoryResponse>>> listCategories(
+            Pageable pageable
+    ) {
+
+        SortValidator.validate(pageable, ALLOWED_SORT_PROPERTIES);
 
         Page<Category> pages = listCategoriesUseCase.execute(pageable);
 

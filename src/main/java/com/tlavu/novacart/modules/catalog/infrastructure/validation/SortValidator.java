@@ -7,6 +7,27 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Set;
 
+/**
+ * Validates that all sort properties in a {@link Pageable} are within an allowed set,
+ * preventing {@link org.springframework.data.mapping.PropertyReferenceException}
+ * from leaking as an unhandled 500 error.
+ *
+ * <p><b>IMPORTANT:</b> Must be called explicitly in every Controller that accepts
+ * a {@link Pageable} parameter, right after receiving it and before passing it
+ * to any UseCase or Repository. This is NOT automatically enforced —
+ * forgetting to call it will cause invalid sort fields to throw
+ * {@link org.springframework.data.mapping.PropertyReferenceException}, resulting in
+ * an unhandled 500 response instead of a proper 400.
+ *
+ * <p>Example:
+ * <pre>{@code
+ * @GetMapping
+ * public ... list(Pageable pageable) {
+ *     SortValidator.validate(pageable, ALLOWED_SORT_PROPERTIES);
+ *     ...
+ * }
+ * }</pre>
+ */
 @UtilityClass
 public class SortValidator {
 
