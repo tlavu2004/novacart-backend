@@ -1,15 +1,16 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
+import com.tlavu.novacart.modules.catalog.application.exception.specific.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.DuplicateProductNameException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.DuplicateProductSlugException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.ProductNotFoundException;
 import com.tlavu.novacart.shared.application.exception.code.global.GlobalErrorCode;
-import com.tlavu.novacart.shared.application.exception.common.ConflictException;
 import com.tlavu.novacart.shared.application.exception.common.InvalidInputException;
-import com.tlavu.novacart.shared.application.exception.common.ResourceNotFoundException;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
-import com.tlavu.novacart.modules.catalog.application.exception.code.CatalogErrorCode;
 import com.tlavu.novacart.modules.catalog.infrastructure.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,10 +35,7 @@ public class UpdateProductUseCase {
     ) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        CatalogErrorCode.PRODUCT_NOT_FOUND,
-                        "Product with id=%d not found".formatted(id)
-                ));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         if (name != null) {
 
@@ -51,19 +49,13 @@ public class UpdateProductUseCase {
             }
 
             if (productRepository.existsByNameIgnoreCaseAndIdNot(normalizedName, id)) {
-                throw new ConflictException(
-                        CatalogErrorCode.PRODUCT_ALREADY_EXISTS,
-                        "Product '%s' already exists".formatted(normalizedName)
-                );
+                throw new DuplicateProductNameException(normalizedName);
             }
 
             String slug = SlugUtils.generate(normalizedName);
 
             if (productRepository.existsBySlugAndIdNot(slug, id)) {
-                throw new ConflictException(
-                        CatalogErrorCode.PRODUCT_SLUG_ALREADY_EXISTS,
-                        "Product with slug '%s' already exists".formatted(slug)
-                );
+                throw new DuplicateProductSlugException(slug);
             }
 
             product.setName(normalizedName);
@@ -83,10 +75,7 @@ public class UpdateProductUseCase {
         if (categoryId != null) {
 
             Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            CatalogErrorCode.CATEGORY_NOT_FOUND,
-                            "Category with id=%d not found".formatted(categoryId)
-                    ));
+                    .orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
             product.setCategory(category);
         }

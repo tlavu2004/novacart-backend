@@ -1,10 +1,9 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
-import com.tlavu.novacart.shared.application.exception.common.ResourceNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
-import com.tlavu.novacart.modules.catalog.application.exception.code.CatalogErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +20,7 @@ public class DeleteProductUseCase {
     public void execute(Long id) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        CatalogErrorCode.PRODUCT_NOT_FOUND,
-                        "Product with id=%d not found".formatted(id)
-                ));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         // TODO: Check for active orders (PENDING/CONFIRMED) before deleting. Implement after Order module is completed
 

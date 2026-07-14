@@ -1,11 +1,10 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
-import com.tlavu.novacart.shared.application.exception.common.InvalidInputException;
-import com.tlavu.novacart.shared.application.exception.common.ResourceNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.InvalidProductStatusTransitionException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
-import com.tlavu.novacart.modules.catalog.application.exception.code.CatalogErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +19,12 @@ public class UpdateProductStatusUseCase {
     public Product execute(Long id, ProductStatus status) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        CatalogErrorCode.PRODUCT_NOT_FOUND,
-                        "Product with id=%d not found".formatted(id)
-                ));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         if (!product.getStatus().canTransitionTo(status)) {
-            throw new InvalidInputException(
-                    CatalogErrorCode.INVALID_STATUS_TRANSITION,
-                    "Cannot transition from %s to %s".formatted(product.getStatus(), status)
+            throw new InvalidProductStatusTransitionException(
+                    product.getStatus(),
+                    status
             );
         }
 
