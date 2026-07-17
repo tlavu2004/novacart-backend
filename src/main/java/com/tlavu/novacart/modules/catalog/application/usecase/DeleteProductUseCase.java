@@ -2,7 +2,6 @@ package com.tlavu.novacart.modules.catalog.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.application.exception.specific.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
-import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ public class DeleteProductUseCase {
 
         // TODO: Check for active orders (PENDING/CONFIRMED) before deleting. Implement after Order module is completed
 
-        product.setStatus(ProductStatus.INACTIVE);
         product.setDeletedAt(Instant.now());
 
         productRepository.save(product);

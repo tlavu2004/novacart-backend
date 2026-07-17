@@ -5,7 +5,6 @@ import com.tlavu.novacart.modules.catalog.application.exception.specific.Duplica
 import com.tlavu.novacart.modules.catalog.application.exception.specific.DuplicateProductSlugException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
-import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.util.SlugUtils;
@@ -50,7 +49,6 @@ public class CreateProductUseCase {
         product.setDescription(description);
         product.setPrice(price);
         product.setSlug(slug);
-        product.setStatus(ProductStatus.DRAFT);
         product.setStockQuantity(stockQuantity);
         product.setCategory(category);
 

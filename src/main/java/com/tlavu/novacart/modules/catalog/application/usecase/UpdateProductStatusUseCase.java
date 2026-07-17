@@ -1,6 +1,5 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.application.exception.specific.InvalidProductStatusTransitionException;
 import com.tlavu.novacart.modules.catalog.application.exception.specific.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
@@ -21,14 +20,7 @@ public class UpdateProductStatusUseCase {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        if (!product.getStatus().canTransitionTo(status)) {
-            throw new InvalidProductStatusTransitionException(
-                    product.getStatus(),
-                    status
-            );
-        }
-
-        product.setStatus(status);
+        product.changeStatus(status);
 
         return productRepository.save(product);
     }

@@ -1,4 +1,4 @@
-package com.tlavu.novacart.modules.catalog.application.exception.specific;
+package com.tlavu.novacart.modules.catalog.domain.exception;
 
 import com.tlavu.novacart.modules.catalog.application.exception.code.CatalogErrorCode;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
