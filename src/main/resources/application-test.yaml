@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://${TEST_DB_HOST:localhost}:${TEST_DB_PORT:5433}/${TEST_DB_NAME:novacart_test}
-    username: ${TEST_DB_USERNAME:novacart_test}
-    password: ${TEST_DB_PASSWORD:novacart_test}
+    username: ${TEST_DB_USERNAME}
+    password: ${TEST_DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
