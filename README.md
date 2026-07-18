@@ -83,7 +83,7 @@ make test-build-run
 
 The Test API is available at `http://localhost:8081`.
 
-When `Ctrl+C` is used to stop Spring Boot, only the backend process stops. The PostgreSQL container remains running.
+When `Ctrl+C` is used to stop Spring Boot, only the backend process stops. The PostgreSQL container remains running. The Makefile handles this intentional interrupt without reporting a make error.
 
 ## Make targets
 
