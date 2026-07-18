@@ -9,7 +9,6 @@ public class ProductNotFoundException extends ResourceNotFoundException {
 
         super(
                 CatalogErrorCode.PRODUCT_NOT_FOUND,
-                "Product with id=%d not found".formatted(id)    
-        );
+                "Product with id=%d not found".formatted(id));
     }
 }
