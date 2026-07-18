@@ -1,0 +1,255 @@
+# NovaCart Catalog API — exception and validation checks
+#
+# How to run
+# 1. Start the application, then run every request in Group 0 in order.
+#    Group 0 creates isolated data and stores response IDs in IntelliJ HTTP Client
+#    variables for later requests. It does not depend on existing database data.
+# 2. Run Groups 1–3 in any order. Do not run Group 4 until finished.
+# 3. `missingId` intentionally does not map to seeded/created data.
+#
+# Note: There is no DataSeeder with stable IDs in the current project, so fixed IDs
+# such as `1` are intentionally avoided. If a future DataSeeder guarantees IDs,
+# replace the Group 0 variables with those documented seed IDs.
+#
+# Expected log levels (GlobalExceptionHandler): 4xx => WARN, 5xx => ERROR.
+#
+# Handler coverage note:
+# - PropertyReferenceException is not separately reachable through the current
+#   catalog endpoints because SortValidator rejects unknown sort fields first.
+# - The generic Exception handler has no deterministic, safe request case and is
+#   therefore documented in the log table but intentionally not forced here.
+# - /health/db is excluded because it returns its own HealthResponse rather than
+#   flowing through GlobalExceptionHandler.
+
+@baseUrl = http://localhost:8081
+@missingId = 999999
+@runId = {{$random.uuid}}
+
+### ============================================================================
+### Group 0 — setup (run first, in order)
+### ============================================================================
+
+### Create an isolated category. Expected: 201 Created
+# @name createTestCategory
+POST {{baseUrl}}/api/v1/categories
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "HTTP Test Category {{runId}}",
+  "description": "Temporary category created by IntelliJ HTTP Client"
+}
+
+### Create an isolated product in the category above. Expected: 201 Created
+# @name createTestProduct
+POST {{baseUrl}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "HTTP Test Product {{runId}}",
+  "description": "Temporary product created by IntelliJ HTTP Client",
+  "price": 10.00,
+  "stockQuantity": 1,
+  "categoryId": {{createTestCategory.response.body.$.data.id}}
+}
+
+### ============================================================================
+### Group 1 — business exceptions (BaseException handler)
+### ============================================================================
+
+### ProductNotFoundException. Expected: 404 Not Found, code PROD_003
+GET {{baseUrl}}/api/v1/products/{{missingId}}
+Accept: application/json
+
+### CategoryNotFoundException. Expected: 404 Not Found, code CAT_003
+GET {{baseUrl}}/api/v1/categories/{{missingId}}
+Accept: application/json
+
+### DuplicateCategoryNameException. Expected: 409 Conflict, code CAT_001
+POST {{baseUrl}}/api/v1/categories
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "HTTP Test Category {{runId}}",
+  "description": "Must conflict with the Group 0 category name"
+}
+
+### DuplicateCategorySlugException. Expected: 409 Conflict, code CAT_002
+# Different name, but it normalizes to the same slug as the Group 0 category.
+POST {{baseUrl}}/api/v1/categories
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "HTTP-Test Category {{runId}}",
+  "description": "Must conflict with the Group 0 category slug"
+}
+
+### DuplicateProductNameException. Expected: 409 Conflict, code PROD_001
+POST {{baseUrl}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "HTTP Test Product {{runId}}",
+  "description": "Must conflict with the Group 0 product name",
+  "price": 10.00,
+  "stockQuantity": 1,
+  "categoryId": {{createTestCategory.response.body.$.data.id}}
+}
+
+### DuplicateProductSlugException. Expected: 409 Conflict, code PROD_002
+# Different name, but it normalizes to the same slug as the Group 0 product.
+POST {{baseUrl}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "HTTP-Test Product {{runId}}",
+  "description": "Must conflict with the Group 0 product slug",
+  "price": 10.00,
+  "stockQuantity": 1,
+  "categoryId": {{createTestCategory.response.body.$.data.id}}
+}
+
+### CategoryHasActiveProductsException. Expected: 409 Conflict, code CAT_004
+DELETE {{baseUrl}}/api/v1/categories/{{createTestCategory.response.body.$.data.id}}
+Accept: application/json
+
+### InvalidProductStatusTransitionException (DRAFT -> INACTIVE). Expected: 400 Bad Request, code PROD_004
+PATCH {{baseUrl}}/api/v1/products/{{createTestProduct.response.body.$.data.id}}/status
+Accept: application/json
+Content-Type: application/json
+
+{
+  "status": "INACTIVE"
+}
+
+### InvalidInputException — blank product name. Expected: 400 Bad Request, code VAL_002
+PATCH {{baseUrl}}/api/v1/products/{{createTestProduct.response.body.$.data.id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "   "
+}
+
+### InvalidInputException — blank category name. Expected: 400 Bad Request, code VAL_002
+PATCH {{baseUrl}}/api/v1/categories/{{createTestCategory.response.body.$.data.id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "   "
+}
+
+### CategoryNotFoundException from a nested business operation. Expected: 404 Not Found, code CAT_003
+PATCH {{baseUrl}}/api/v1/products/{{createTestProduct.response.body.$.data.id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "categoryId": {{missingId}}
+}
+
+### ============================================================================
+### Group 2 — framework / routing exceptions
+### ============================================================================
+
+### NoResourceFoundException. Expected: 404 Not Found, code SYS_001
+GET {{baseUrl}}/api/v1/not-a-real-route
+Accept: application/json
+
+### MethodArgumentTypeMismatchException. Expected: 400 Bad Request, code VAL_004
+GET {{baseUrl}}/api/v1/products/not-a-number
+Accept: application/json
+
+### HttpRequestMethodNotSupportedException. Expected: 405 Method Not Allowed, code SYS_002
+PUT {{baseUrl}}/api/v1/products/{{missingId}}
+Accept: application/json
+Content-Type: application/json
+
+{}
+
+### InvalidSortFieldException (thrown before repository access). Expected: 400 Bad Request, code VAL_003
+GET {{baseUrl}}/api/v1/products?page=0&size=10&sort=notARealField,asc
+Accept: application/json
+
+### ============================================================================
+### Group 3 — validation exceptions
+### ============================================================================
+
+### MethodArgumentNotValidException — missing required create-product fields. Expected: 400 Bad Request, code VAL_001
+POST {{baseUrl}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "description": "Missing name, price, stockQuantity, and categoryId"
+}
+
+### MethodArgumentNotValidException — invalid numeric values. Expected: 400 Bad Request, code VAL_001
+POST {{baseUrl}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Validation Test Product {{runId}}",
+  "price": 0,
+  "stockQuantity": -1,
+  "categoryId": {{missingId}}
+}
+
+### MethodArgumentNotValidException — blank category name. Expected: 400 Bad Request, code VAL_001
+POST {{baseUrl}}/api/v1/categories
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "   ",
+  "description": "Validation must reject a blank name"
+}
+
+### HttpMessageNotReadableException — invalid enum value. Expected: 400 Bad Request, code VAL_001
+PATCH {{baseUrl}}/api/v1/products/{{createTestProduct.response.body.$.data.id}}/status
+Accept: application/json
+Content-Type: application/json
+
+{
+  "status": "NOT_A_PRODUCT_STATUS"
+}
+
+### HttpMessageNotReadableException — malformed JSON. Expected: 400 Bad Request, code VAL_001
+POST {{baseUrl}}/api/v1/categories
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Malformed JSON"
+
+### ============================================================================
+### Group 4 — cleanup (run last, in order)
+### ============================================================================
+
+### Soft-delete the temporary product. Expected: 204 No Content
+DELETE {{baseUrl}}/api/v1/products/{{createTestProduct.response.body.$.data.id}}
+Accept: application/json
+
+### Soft-delete the temporary category. Expected: 204 No Content
+DELETE {{baseUrl}}/api/v1/categories/{{createTestCategory.response.body.$.data.id}}
+Accept: application/json
+
+### Quick log-reference table
+# | Expected status | Typical response error.code | GlobalExceptionHandler log check |
+# |---|---|---|
+# | 400 | VAL_001 / VAL_002 / VAL_003 / VAL_004 / PROD_004 | WARN: `Request failed at <URI>: <message>` |
+# | 404 | PROD_003 / CAT_003 / SYS_001 | WARN: `Request failed at <URI>: <message>` |
+# | 405 | SYS_002 | WARN: `Request failed at <URI>: <message>` |
+# | 409 | CAT_001 / CAT_002 / CAT_004 / PROD_001 / PROD_002 | WARN: `Request failed at <URI>: <message>` |
+# | 500 | SYS_003 | ERROR: same message plus exception stack trace |
+#
+# The current file intentionally has no safe 500 case: triggering the generic
+# fallback requires a real unexpected server fault and should not be manufactured
+# against a shared development database.
