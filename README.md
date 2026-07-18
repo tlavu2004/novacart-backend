@@ -15,15 +15,15 @@ Spring Boot backend for the NovaCart project.
 ## Project structure
 
 ```text
-docker-compose.yml          # shared Compose configuration
-docker-compose.dev.yml      # Dev database override
-docker-compose.test.yml     # Test database override
-application.yaml            # shared Spring configuration
-application-test.yaml       # Test profile overrides
-.env.example                # Dev environment template
-.env.test.example           # Test environment template
-docs/testing/               # manual REST Client test cases
-Makefile                    # common local commands
+ docker-compose.yml                         # shared Compose configuration
+ docker-compose.dev.yml                     # Dev database override
+ docker-compose.test.yml                    # Test database override
+ src/main/resources/application.yaml        # shared Spring configuration
+ src/main/resources/application-test.yaml   # Test profile overrides
+ .env.example                               # Dev environment template
+.env.test.example                           # Test environment template
+docs/testing/                               # manual REST Client test cases
+Makefile                                    # common local commands
 ```
 
 ## Environment files
