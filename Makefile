@@ -1,7 +1,13 @@
-.PHONY: dev-up dev-down dev-run dev-build-run dev-logs dev-clean test-up test-down test-run test-build-run test-logs test-clean config-dev config-test
+.PHONY: dev-up dev-start dev-stop dev-down dev-run dev-build-run dev-logs dev-clean test-up test-start test-stop test-down test-run test-build-run test-logs test-clean config-dev config-test
 
 dev-up:
 	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml up -d
+
+dev-start:
+	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml start
+
+dev-stop:
+	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml stop
 
 dev-down:
 	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml down
@@ -20,6 +26,12 @@ dev-clean:
 
 test-up:
 	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml up -d
+
+test-start:
+	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml start
+
+test-stop:
+	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml stop
 
 test-down:
 	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml down

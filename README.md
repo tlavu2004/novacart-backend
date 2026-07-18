@@ -91,10 +91,14 @@ When `Ctrl+C` is used to stop Spring Boot, only the backend process stops. The P
 
 ```bash
 make dev-up          # start Dev PostgreSQL only
+make dev-start       # start existing, stopped Dev containers
+make dev-stop        # stop Dev containers without removing them
 make dev-run         # start Dev PostgreSQL and run the backend without rebuilding
 make dev-build-run   # start Dev PostgreSQL, build without tests, then run the backend
 
 make test-up         # start Test PostgreSQL only
+make test-start      # start existing, stopped Test containers
+make test-stop       # stop Test containers without removing them
 make test-run        # start Test PostgreSQL and run the backend without rebuilding
 make test-build-run  # start Test PostgreSQL, build without tests, then run the backend
 ```
@@ -110,6 +114,10 @@ make test-clean      # stop Test and delete its volume and data
 ```
 
 `*-clean` commands are destructive for the selected environment.
+
+Use `*-start` and `*-stop` for a temporary pause when the Compose containers
+already exist. Use `*-up` when containers may not exist yet; use `*-down` when
+you want to remove containers and networks while keeping the database volume.
 
 ### Logs and configuration
 
