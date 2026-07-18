@@ -23,7 +23,7 @@
 
 @baseUrl = http://localhost:8081
 @missingId = 999999
-@runId = {{$random.uuid}}
+@runId = {{$guid}}
 
 ### ============================================================================
 ### Group 0 — setup (run first, in order)
