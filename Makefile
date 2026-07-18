@@ -13,10 +13,10 @@ dev-down:
 	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml down
 
 dev-run: dev-up
-	trap 'exit 0' INT TERM; SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run
+	SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status
 
 dev-build-run: dev-up
-	SPRING_PROFILES_ACTIVE=dev mvn clean install -DskipTests && (trap 'exit 0' INT TERM; SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run)
+	SPRING_PROFILES_ACTIVE=dev mvn clean install -DskipTests && (SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status)
 
 dev-logs:
 	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml logs -f postgres
@@ -37,10 +37,10 @@ test-down:
 	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml down
 
 test-run: test-up
-	trap 'exit 0' INT TERM; SPRING_PROFILES_ACTIVE=test mvn spring-boot:run
+	SPRING_PROFILES_ACTIVE=test mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status
 
 test-build-run: test-up
-	SPRING_PROFILES_ACTIVE=test mvn clean install -DskipTests && (trap 'exit 0' INT TERM; SPRING_PROFILES_ACTIVE=test mvn spring-boot:run)
+	SPRING_PROFILES_ACTIVE=test mvn clean install -DskipTests && (SPRING_PROFILES_ACTIVE=test mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status)
 
 test-logs:
 	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml logs -f postgres
