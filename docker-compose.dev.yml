@@ -1,0 +1,22 @@
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: ${DB_NAME:-novacart}
+      POSTGRES_USER: ${DB_USERNAME:-novacart}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
+
+    ports:
+      - "${DB_PORT:-5432}:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - novacart-network
+
+volumes:
+  postgres_data:
+
+networks:
+  novacart-network:
+    driver: bridge

@@ -1,9 +1,8 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.CategoryNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
-import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +17,6 @@ public class GetCategoryByIdUseCase {
     public Category execute(Long id) {
 
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        ErrorCode.CATEGORY_NOT_FOUND,
-                        "Category with id=%d not found".formatted(id)
-                ));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 }

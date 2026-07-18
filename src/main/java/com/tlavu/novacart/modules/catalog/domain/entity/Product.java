@@ -1,7 +1,9 @@
 package com.tlavu.novacart.modules.catalog.domain.entity;
 
+import com.tlavu.novacart.modules.catalog.domain.exception.InvalidProductStatusTransitionException;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,6 +40,7 @@ public class Product {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Setter(AccessLevel.NONE)
     private ProductStatus status = ProductStatus.DRAFT;
 
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
@@ -60,4 +63,11 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    public void changeStatus(ProductStatus newStatus) {
+        if (!this.status.canTransitionTo(newStatus)) {
+            throw new InvalidProductStatusTransitionException(this.status, newStatus);
+        }
+        this.status = newStatus;
+    }
 }

@@ -1,11 +1,12 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
-import com.tlavu.novacart.modules.catalog.application.exception.InvalidInputException;
-import com.tlavu.novacart.modules.catalog.application.exception.ResourceNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.DuplicateCategoryNameException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.DuplicateCategorySlugException;
+import com.tlavu.novacart.shared.application.exception.code.global.GlobalErrorCode;
+import com.tlavu.novacart.shared.application.exception.common.InvalidInputException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
-import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import com.tlavu.novacart.modules.catalog.infrastructure.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,7 @@ public class UpdateCategoryUseCase {
     ) {
 
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        ErrorCode.CATEGORY_NOT_FOUND,
-                        "Category with id=%d not found".formatted(id)
-                ));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
 
         if (name != null) {
 
@@ -38,27 +36,21 @@ public class UpdateCategoryUseCase {
             if (normalizedName.isEmpty()) {
 
                 throw new InvalidInputException(
-                        ErrorCode.INVALID_INPUT,
+                        GlobalErrorCode.INVALID_INPUT,
                         "Category name must not be blank"
                 );
             }
 
             if (categoryRepository.existsByNameIgnoreCaseAndIdNot(normalizedName, id)) {
 
-                throw new ConflictException(
-                        ErrorCode.CATEGORY_ALREADY_EXISTS,
-                        "Category '%s' already exists".formatted(normalizedName)
-                );
+                throw new DuplicateCategoryNameException(normalizedName);
             }
 
             String slug = SlugUtils.generate(normalizedName);
 
             if (categoryRepository.existsBySlugAndIdNot(slug, id)) {
 
-                throw new ConflictException(
-                        ErrorCode.CATEGORY_SLUG_ALREADY_EXISTS,
-                        "Category with slug '%s' already exists".formatted(slug)
-                );
+                throw new DuplicateCategorySlugException(slug);
             }
 
             category.setName(normalizedName);

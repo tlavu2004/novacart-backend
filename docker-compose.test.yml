@@ -1,0 +1,22 @@
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: ${TEST_DB_NAME:-novacart_test}
+      POSTGRES_USER: ${TEST_DB_USERNAME:-novacart_test}
+      POSTGRES_PASSWORD: ${TEST_DB_PASSWORD:?TEST_DB_PASSWORD must be set}
+
+    ports:
+      - "${TEST_DB_PORT:-5433}:5432"
+
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+
+    networks:
+      - novacart-test-network
+
+volumes:
+  postgres_test_data:
+
+networks:
+  novacart-test-network:
+    driver: bridge

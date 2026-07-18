@@ -1,9 +1,9 @@
 package com.tlavu.novacart.modules.catalog.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.application.exception.ConflictException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.DuplicateCategoryNameException;
+import com.tlavu.novacart.modules.catalog.application.exception.specific.DuplicateCategorySlugException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
-import com.tlavu.novacart.shared.exception.code.ErrorCode;
 import com.tlavu.novacart.modules.catalog.infrastructure.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,17 +25,11 @@ public class CreateCategoryUseCase {
         String slug = SlugUtils.generate(normalizedName);
 
         if (categoryRepository.existsByNameIgnoreCase(normalizedName)) {
-            throw new ConflictException(
-                    ErrorCode.CATEGORY_ALREADY_EXISTS,
-                    "Category '%s' already exists".formatted(normalizedName)
-            );
+            throw new DuplicateCategoryNameException(normalizedName);
         }
 
         if (categoryRepository.existsBySlug(slug)) {
-            throw new ConflictException(
-                    ErrorCode.CATEGORY_SLUG_ALREADY_EXISTS,
-                    "Category with slug '%s' already exists".formatted(slug)
-            );
+            throw new DuplicateCategorySlugException(slug);
         }
 
         Category category = new Category();
