@@ -21,7 +21,7 @@ public class CreateCategoryUseCase {
             String description
     ) {
 
-        String normalizedName = name.trim();
+        String normalizedName = name.trim().replaceAll("\\s+", " ");
         String slug = SlugUtils.generate(normalizedName);
 
         if (categoryRepository.existsByNameIgnoreCase(normalizedName)) {
