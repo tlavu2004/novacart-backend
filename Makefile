@@ -1,28 +1,28 @@
-.PHONY: dev-up dev-start dev-stop dev-down dev-run dev-build-run dev-logs dev-clean test-up test-start test-stop test-down test-run test-build-run test-logs test-clean config-dev config-test
+.PHONY: local-up local-start local-stop local-down local-run local-build-run local-logs local-clean test-up test-start test-stop test-down test-run test-build-run test-logs test-clean config-local config-test
 
-dev-up:
-	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml up -d
+local-up:
+	docker compose -p novacart-local --env-file .env.local -f docker-compose.yml -f docker-compose.local.yml up -d
 
-dev-start:
-	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml start
+local-start:
+	docker compose -p novacart-local --env-file .env.local -f docker-compose.yml -f docker-compose.local.yml start
 
-dev-stop:
-	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml stop
+local-stop:
+	docker compose -p novacart-local --env-file .env.local -f docker-compose.yml -f docker-compose.local.yml stop
 
-dev-down:
-	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml down
+local-down:
+	docker compose -p novacart-local --env-file .env.local -f docker-compose.yml -f docker-compose.local.yml down
 
-dev-run: dev-up
-	SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status
+local-run: local-up
+	SPRING_PROFILES_ACTIVE=local mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status
 
-dev-build-run: dev-up
-	SPRING_PROFILES_ACTIVE=dev mvn clean install -DskipTests && (SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status)
+local-build-run: local-up
+	mvn clean install -DskipTests && (SPRING_PROFILES_ACTIVE=local mvn spring-boot:run; status=$$?; if [ $$status -eq 130 ] || [ $$status -eq 143 ]; then exit 0; fi; exit $$status)
 
-dev-logs:
-	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml logs -f postgres
+local-logs:
+	docker compose -p novacart-local --env-file .env.local -f docker-compose.yml -f docker-compose.local.yml logs -f postgres
 
-dev-clean:
-	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml down -v --remove-orphans
+local-clean:
+	docker compose -p novacart-local --env-file .env.local -f docker-compose.yml -f docker-compose.local.yml down -v --remove-orphans
 
 test-up:
 	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml up -d
@@ -48,8 +48,8 @@ test-logs:
 test-clean:
 	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml down -v --remove-orphans
 
-config-dev:
-	docker compose -p novacart-dev --env-file .env -f docker-compose.yml -f docker-compose.dev.yml config
+config-local:
+	docker compose -p novacart-local --env-file .env.local -f docker-compose.yml -f docker-compose.local.yml config
 
 config-test:
 	docker compose -p novacart-test --env-file .env.test -f docker-compose.yml -f docker-compose.test.yml config

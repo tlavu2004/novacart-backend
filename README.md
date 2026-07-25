@@ -2,7 +2,7 @@
 
 Spring Boot backend for the NovaCart project.
 
-> **MVP note:** This README documents the current local Dev/Test workflow. Sections marked with `[TODO]` are reserved for future documentation as the MVP grows.
+> **MVP note:** This README documents the current Local/Test workflow. Sections marked with `[TODO]` are reserved for future documentation as the MVP grows.
 
 ## Prerequisites
 
@@ -16,11 +16,12 @@ Spring Boot backend for the NovaCart project.
 
 ```text
  docker-compose.yml                         # shared Compose configuration
- docker-compose.dev.yml                     # Dev database override
+ docker-compose.local.yml                   # Local database override
  docker-compose.test.yml                    # Test database override
  src/main/resources/application.yaml        # shared Spring configuration
+ src/main/resources/application-local.yaml  # Local profile environment import
  src/main/resources/application-test.yaml   # Test profile overrides
- .env.example                               # Dev environment template
+ .env.local.example                         # Local environment template
 .env.test.example                           # Test environment template
 docs/testing/                               # manual REST Client test cases
 Makefile                                    # common local commands
@@ -31,17 +32,16 @@ Makefile                                    # common local commands
 Create local environment files from the templates and fill in real values:
 
 ```bash
-cp .env.example .env
+cp .env.local.example .env.local
 cp .env.test.example .env.test
 ```
 
-`.env` and `.env.test` are local-only files and must not be committed. The Test profile imports `.env.test`; the Dev profile uses the project dotenv configuration to read `.env`.
+`.env.local` and `.env.test` are local-only files and must not be committed. The Local and Test profiles explicitly import their matching environment file.
 
 Required database variables include:
 
 ```text
 DB_HOST DB_PORT DB_NAME DB_USERNAME DB_PASSWORD
-TEST_DB_HOST TEST_DB_PORT TEST_DB_NAME TEST_DB_USERNAME TEST_DB_PASSWORD
 ```
 
 Passwords are required by Compose and have no production-safe defaults.
@@ -50,28 +50,28 @@ Passwords are required by Compose and have no production-safe defaults.
 
 | Environment | Spring profile | PostgreSQL port | Application port | Compose project | Volume |
 |---|---|---:|---:|---|---|
-| Dev | `dev` | `5432` | `8080` | `novacart-dev` | `postgres_data` |
+| Local | `local` | `5432` | `8080` | `novacart-local` | `postgres_local_data` |
 | Test | `test` | `5433` | `8081` | `novacart-test` | `postgres_test_data` |
 
-Dev and Test use separate Compose project names, networks, containers, and volumes, so they can run in parallel.
+Local and Test use separate Compose project names, networks, containers, and volumes, so they can run in parallel.
 
 ## Standard startup workflow
 
-### Dev
+### Local
 
-Build the application and start Dev PostgreSQL and Spring Boot:
+Build the application and start Local PostgreSQL and Spring Boot:
 
 ```bash
-make dev-build-run
+make local-build-run
 ```
 
 If the database is already running and only the backend needs to restart:
 
 ```bash
-make dev-run
+make local-run
 ```
 
-The Dev API is available at `http://localhost:8080`.
+The Local API is available at `http://localhost:8080`.
 
 ### Test
 
@@ -90,11 +90,11 @@ When `Ctrl+C` is used to stop Spring Boot, only the backend process stops. The P
 ### Start and run
 
 ```bash
-make dev-up          # start Dev PostgreSQL only
-make dev-start       # start existing, stopped Dev containers
-make dev-stop        # stop Dev containers without removing them
-make dev-run         # start Dev PostgreSQL and run the backend without rebuilding
-make dev-build-run   # start Dev PostgreSQL, build without tests, then run the backend
+make local-up          # start Local PostgreSQL only
+make local-start       # start existing, stopped Local containers
+make local-stop        # stop Local containers without removing them
+make local-run         # start Local PostgreSQL and run the backend without rebuilding
+make local-build-run   # start Local PostgreSQL, build without tests, then run the backend
 
 make test-up         # start Test PostgreSQL only
 make test-start      # start existing, stopped Test containers
@@ -106,10 +106,10 @@ make test-build-run  # start Test PostgreSQL, build without tests, then run the 
 ### Stop and clean
 
 ```bash
-make dev-down        # stop Dev containers and networks; keep the database volume
+make local-down      # stop Local containers and networks; keep the database volume
 make test-down       # stop Test containers and networks; keep the database volume
 
-make dev-clean       # stop Dev and delete its volume and data
+make local-clean     # stop Local and delete its volume and data
 make test-clean      # stop Test and delete its volume and data
 ```
 
@@ -122,9 +122,9 @@ you want to remove containers and networks while keeping the database volume.
 ### Logs and configuration
 
 ```bash
-make dev-logs        # follow Dev PostgreSQL logs
+make local-logs      # follow Local PostgreSQL logs
 make test-logs       # follow Test PostgreSQL logs
-make config-dev      # print the resolved Dev Compose configuration
+make config-local    # print the resolved Local Compose configuration
 make config-test     # print the resolved Test Compose configuration
 ```
 
@@ -138,7 +138,7 @@ docs/testing/catalog-exception-cases.http
 
 The file uses VS Code REST Client syntax. Run the setup requests first so the named request response references can provide temporary entity IDs. Then run the Business, Framework/Routing, and Validation groups.
 
-Use port `8080` for Dev and port `8081` for Test. Do not run Test requests against the Dev database.
+Use port `8080` for Local and port `8081` for Test. Do not run Test requests against the Local database.
 
 ## Database and migrations
 
@@ -161,9 +161,9 @@ The planned deployment target is Render:
 
 ## Troubleshooting
 
-- If Compose reports a missing password, check `.env` or `.env.test`.
-- If Dev and Test conflict, verify that `novacart-dev` and `novacart-test` are used as project names.
-- If the API starts before PostgreSQL is ready, inspect `make dev-logs` or `make test-logs` and retry after the database health check passes.
+- If Compose reports a missing password, check `.env.local` or `.env.test`.
+- If Local and Test conflict, verify that `novacart-local` and `novacart-test` are used as project names.
+- If the API starts before PostgreSQL is ready, inspect `make local-logs` or `make test-logs` and retry after the database health check passes.
 - If a REST Client ID variable is unresolved, run the named setup request before the dependent request.
 
 > [TODO] Add common startup errors, database reset guidance, and CI troubleshooting after the MVP test suite is in place.
