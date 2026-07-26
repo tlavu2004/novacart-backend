@@ -28,8 +28,8 @@ These tests must not start Spring, a database, or an HTTP server.
   boundary inputs.
 - `[DONE]` `SortValidator`: allowed properties, rejected properties, and
   multiple sort orders.
-- `[TODO]` Optional DTO validation unit tests; HTTP validation is still required
-  in the Web layer.
+- `[DONE]` DTO constraints are covered through Web-layer tests; separate DTO
+  validation unit tests are intentionally unnecessary.
 
 ### 2. Application/use-case unit tests
 
@@ -55,9 +55,8 @@ Use JUnit and Mockito with repositories mocked. Test `Category` first because
 - `[DONE]` Update: partial updates, null-field preservation, duplicate name/slug,
   blank name, and missing replacement category.
 - `[DONE]` Update status: not found, valid transition, invalid transition.
-- `[PARTIAL]` Update stock: update behavior and not found are covered; negative
-  stock validation belongs to the Web layer because the use case currently
-  delegates that boundary rule to request validation.
+- `[DONE]` Update stock: update behavior and not found are covered here;
+  negative stock validation is covered in the Web layer.
 - `[DONE]` Delete: soft delete and not found.
 
 ### 3. Persistence/data-layer tests
@@ -99,27 +98,27 @@ Use `@WebMvcTest` and MockMvc with use cases mocked; do not use a database.
 
 #### CategoryController
 
-- `[TODO]` Get by ID: 200 and 404.
-- `[TODO]` List: pagination, response mapping, and sorting.
-- `[TODO]` Create: 201 and request validation.
-- `[TODO]` Update: 200, validation, and business errors.
-- `[TODO]` Delete: 204, 404, and conflict when products exist.
+- `[DONE]` Get by ID: 200 and 404.
+- `[DONE]` List: pagination, response mapping, and sorting.
+- `[DONE]` Create: 201 and request validation.
+- `[DONE]` Update: 200, validation, and business errors.
+- `[DONE]` Delete: 204, 404, and conflict when products exist.
 
 #### ProductController
 
-- `[TODO]` Get by ID: 200 and 404.
-- `[TODO]` List: filters, pagination, sorting, and rejected sort properties.
-- `[TODO]` Create: 201, validation, and missing category.
-- `[TODO]` Update: partial updates and business errors.
-- `[TODO]` Update status: valid/invalid enum and transition errors.
-- `[TODO]` Update stock: validation and not found.
-- `[TODO]` Delete: 204 and 404.
+- `[DONE]` Get by ID: 200 and 404.
+- `[DONE]` List: filters, pagination, sorting, and rejected sort properties.
+- `[DONE]` Create: 201, validation, and missing category.
+- `[DONE]` Update: partial updates and business errors.
+- `[DONE]` Update status: valid/invalid enum and transition errors.
+- `[DONE]` Update stock: validation and not found.
+- `[DONE]` Delete: 204 and 404.
 
 #### Shared HTTP behavior
 
-- `[TODO]` `GlobalExceptionHandler`: 400/404/405/409/500, response envelope,
+- `[DONE]` `GlobalExceptionHandler`: 400/404/405/409/500, response envelope,
   and error codes.
-- `[TODO]` Malformed JSON, invalid enum, invalid path-variable type, and
+- `[DONE]` Malformed JSON, invalid enum, invalid path-variable type, and
   unknown routes.
 
 ### 5. Full application integration tests
@@ -150,10 +149,11 @@ Do not mock the application or repository layer.
 
 Category and Product application unit tests, Category JPA tests, the Catalog
 domain/utility unit tests from section 1, and Testcontainers infrastructure are
-present. Product persistence/specification tests are implemented but not yet
-runtime-verified because Docker is unavailable in the current environment. The
-largest remaining gaps are Web-layer tests and full Category–Product API
-integration workflows.
+present. Web-layer tests now cover both Catalog controllers, request validation,
+and shared exception behavior. Product persistence/specification tests are
+implemented but not yet runtime-verified because Docker is unavailable in the
+current environment. The largest remaining gap is the full Category–Product API
+integration workflow.
 
 Manual requests remain separate at
 [`../http/catalog-exception-cases.http`](../http/catalog-exception-cases.http). They
