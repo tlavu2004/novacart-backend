@@ -73,24 +73,18 @@ test and an integration test at the database boundary.
 
 #### Product and the Category–Product relationship
 
-- `[PARTIAL]` `AbstractIntegrationTest` and PostgreSQL Testcontainers exist, and
-  Product persistence tests now use them; runtime execution is blocked because
-  Docker is unavailable in the current environment.
-- `[PARTIAL]` `ProductJpaRepository` tests are implemented for duplicate
-  name/slug, `...AndIdNot`, `existsByCategoryId`, `findById`, and `findAll`;
-  runtime verification is blocked until Docker is available.
-- `[PARTIAL]` `ProductSpecification` tests are implemented for name, status,
-  category ID, min/max price, and combined filters; runtime verification is
-  blocked until Docker is available.
-- `[PARTIAL]` `Product.category` mapping tests cover `ManyToOne`, category
-  persistence, and status enum mapping; runtime verification is blocked until
-  Docker is available.
-- `[PARTIAL]` Database constraint tests cover the product price check; stock
-  constraint coverage and runtime verification remain pending.
-- `[PARTIAL]` Product `@SQLRestriction` and soft-delete behavior are covered;
-  runtime verification is blocked until Docker is available.
-- `[TODO]` Auditing of `createdAt`/`updatedAt`, if required behavior.
-- `[TODO]` Flyway migration and database-constraint smoke tests.
+- `[DONE]` `AbstractIntegrationTest` provides one PostgreSQL Testcontainers
+  instance for the complete test JVM.
+- `[DONE]` `ProductJpaRepository`: duplicate name/slug, `...AndIdNot`,
+  `existsByCategoryId`, `findById`, and `findAll`.
+- `[DONE]` `ProductSpecification`: name, status, category ID, min/max price,
+  individual filters, and combined filters.
+- `[DONE]` `Product.category`: `ManyToOne`, lazy loading, category persistence,
+  and status enum mapping.
+- `[DONE]` Database constraints for positive price and non-negative stock.
+- `[DONE]` Product `@SQLRestriction` and soft-delete behavior.
+- `[DONE]` Auditing of `createdAt` and `updatedAt`.
+- `[DONE]` Flyway migration and database/schema smoke checks.
 
 ### 4. Web-layer tests
 
@@ -126,15 +120,15 @@ Use `@WebMvcTest` and MockMvc with use cases mocked; do not use a database.
 Use `@SpringBootTest` with MockMvc or RestAssured and PostgreSQL Testcontainers.
 Do not mock the application or repository layer.
 
-- `[PARTIAL]` `NovaCartApplicationTests.contextLoads()` checks only that the
-  Spring context starts; it is not API integration coverage.
-- `[TODO]` Create Category, then create a Product belonging to it.
-- `[TODO]` Read, filter, sort, and paginate Products against the real database.
-- `[TODO]` Update a Product and move it to another category.
-- `[TODO]` Reject Category deletion while an active Product exists.
-- `[TODO]` Delete the Product, then the Category; verify soft-deleted records
+- `[DONE]` The application context starts with the isolated `test` profile and
+  PostgreSQL Testcontainers.
+- `[DONE]` Create Category, then create a Product belonging to it.
+- `[DONE]` Read, filter, sort, and paginate Products against the real database.
+- `[DONE]` Update a Product and move it to another category.
+- `[DONE]` Reject Category deletion while an active Product exists.
+- `[DONE]` Delete the Product, then the Category; verify soft-deleted records
   disappear from API/query results.
-- `[TODO]` Verify Flyway runs on the test database and Hibernate validation
+- `[DONE]` Verify Flyway runs on the test database and Hibernate validation
   matches the schema.
 
 ### 6. Additional testing when justified
@@ -147,13 +141,11 @@ Do not mock the application or repository layer.
 
 ## Current coverage summary
 
-Category and Product application unit tests, Category JPA tests, the Catalog
-domain/utility unit tests from section 1, and Testcontainers infrastructure are
-present. Web-layer tests now cover both Catalog controllers, request validation,
-and shared exception behavior. Product persistence/specification tests are
-implemented but not yet runtime-verified because Docker is unavailable in the
-current environment. The largest remaining gap is the full Category–Product API
-integration workflow.
+Sections 1 through 5 are covered: domain/utility tests, application unit tests,
+PostgreSQL persistence tests, Web-layer tests, and the full Category–Product API
+integration workflow. The remaining items in section 6 are optional and should
+be introduced only when their corresponding architecture, client, security,
+performance, or end-to-end requirements exist.
 
 Manual requests remain separate at
 [`../http/catalog-exception-cases.http`](../http/catalog-exception-cases.http). They

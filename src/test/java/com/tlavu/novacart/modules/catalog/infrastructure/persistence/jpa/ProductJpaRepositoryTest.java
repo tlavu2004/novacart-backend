@@ -1,5 +1,6 @@
 package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa;
 
+import com.tlavu.novacart.bootstrap.config.JpaConfig;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
@@ -7,6 +8,7 @@ import com.tlavu.novacart.modules.catalog.infrastructure.persistence.specificati
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.ProductFilterRequest;
 import com.tlavu.novacart.support.AbstractIntegrationTest;
 import jakarta.persistence.EntityManager;
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.context.annotation.Import;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -25,6 +28,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
+@Import(JpaConfig.class)
 class ProductJpaRepositoryTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -152,17 +156,40 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         Product reloaded = productRepository.findById(product.getId()).orElseThrow();
 
         assertThat(reloaded.getStatus()).isEqualTo(ProductStatus.INACTIVE);
+        assertThat(Hibernate.isInitialized(reloaded.getCategory())).isFalse();
         assertThat(reloaded.getCategory().getId()).isEqualTo(category.getId());
         assertThat(reloaded.getCategory().getName()).isEqualTo("Electronics");
     }
 
     @Test
-    void save_whenPriceOrStockViolatesDatabaseConstraint_throwsDataIntegrityViolation() {
+    void save_whenPriceIsNotPositive_throwsDataIntegrityViolation() {
         Category category = persistCategory("Electronics", "electronics");
         Product invalidPrice = product("Invalid Price", "invalid-price", category, ProductStatus.DRAFT, "0", 1);
 
         assertThatThrownBy(() -> productRepository.saveAndFlush(invalidPrice))
                 .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void save_whenStockIsNegative_throwsDataIntegrityViolation() {
+        Category category = persistCategory("Electronics", "electronics");
+        Product invalidStock = product("Invalid Stock", "invalid-stock", category, ProductStatus.DRAFT, "10", -1);
+
+        assertThatThrownBy(() -> productRepository.saveAndFlush(invalidStock))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void save_whenAuditTimestampsAreNull_populatesCreatedAtAndUpdatedAt() {
+        Category category = persistCategory("Electronics", "electronics");
+        Product product = product("Audited Product", "audited-product", category, ProductStatus.DRAFT, "10", 1);
+        product.setCreatedAt(null);
+        product.setUpdatedAt(null);
+
+        Product saved = productRepository.saveAndFlush(product);
+
+        assertThat(saved.getCreatedAt()).isNotNull();
+        assertThat(saved.getUpdatedAt()).isNotNull();
     }
 
     private Category persistCategory(String name, String slug) {

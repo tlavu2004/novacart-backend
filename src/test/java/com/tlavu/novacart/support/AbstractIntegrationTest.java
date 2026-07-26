@@ -3,18 +3,18 @@ package com.tlavu.novacart.support;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
 public abstract class AbstractIntegrationTest {
 
     @SuppressWarnings("resource")
-    @Container
     static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17")
             .withDatabaseName("novacart_test")
             .withUsername("novacart_test")
             .withPassword("novacart_test");
+
+    static {
+        POSTGRES.start();
+    }
 
     @DynamicPropertySource
     static void configureDataSource(DynamicPropertyRegistry registry) {
