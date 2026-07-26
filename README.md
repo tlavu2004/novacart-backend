@@ -23,7 +23,9 @@ Spring Boot backend for the NovaCart project.
  src/main/resources/application-test.yaml   # Test profile overrides
  .env.local.example                         # Local environment template
 .env.test.example                           # Test environment template
-docs/testing/                               # manual REST Client test cases
+ docs/testing/modules/catalog/
+ ├── checklist/catalog-testing-checklist.md  # automated test checklist
+ └── http/catalog-exception-cases.http       # manual REST Client requests
 Makefile                                    # common local commands
 ```
 
@@ -133,7 +135,7 @@ make config-test     # print the resolved Test Compose configuration
 Manual exception and validation cases are in:
 
 ```text
-docs/testing/catalog-exception-cases.http
+ docs/testing/modules/catalog/http/catalog-exception-cases.http
 ```
 
 The file uses VS Code REST Client syntax. Run the setup requests first so the named request response references can provide temporary entity IDs. Then run the Business, Framework/Routing, and Validation groups.
@@ -170,6 +172,10 @@ The planned deployment target is Render:
 
 ## Testing roadmap
 
-The `.http` file is useful for manual development checks. As the project grows, convert these cases into automated integration tests using `@SpringBootTest` with MockMvc or RestAssured, and run them in CI/CD.
+The request file is useful for manual development checks. The automated test
+order and current coverage status are tracked in
+[`docs/testing/modules/catalog/checklist/catalog-testing-checklist.md`](docs/testing/modules/catalog/checklist/catalog-testing-checklist.md).
+As the project grows, convert these cases into automated integration tests using
+`@SpringBootTest` with MockMvc or RestAssured, and run them in CI/CD.
 
 > [TODO] Document unit-test conventions, integration-test profile, Testcontainers, coverage goals, and CI checks.
