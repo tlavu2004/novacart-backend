@@ -48,16 +48,17 @@ Use JUnit and Mockito with repositories mocked. Test `Category` first because
 
 #### Product
 
-- `[TODO]` Create: success, missing category, duplicate name/slug, normalization,
+- `[DONE]` Create: success, missing category, duplicate name/slug, normalization,
   and slug generation.
-- `[TODO]` Get by ID: found and `ProductNotFoundException`.
-- `[TODO]` List: page, filters, and pageable/sort behavior.
-- `[TODO]` Update: partial updates, null-field preservation, duplicate name/slug,
+- `[DONE]` Get by ID: found and `ProductNotFoundException`.
+- `[DONE]` List: page, filters, and pageable/sort behavior.
+- `[DONE]` Update: partial updates, null-field preservation, duplicate name/slug,
   blank name, and missing replacement category.
-- `[TODO]` Update status: not found, valid transition, invalid transition.
-- `[TODO]` Update stock: update behavior, not found, and valid/invalid boundary
-  values.
-- `[TODO]` Delete: soft delete and not found.
+- `[DONE]` Update status: not found, valid transition, invalid transition.
+- `[PARTIAL]` Update stock: update behavior and not found are covered; negative
+  stock validation belongs to the Web layer because the use case currently
+  delegates that boundary rule to request validation.
+- `[DONE]` Delete: soft delete and not found.
 
 ### 3. Persistence/data-layer tests
 
@@ -73,15 +74,22 @@ test and an integration test at the database boundary.
 
 #### Product and the Category–Product relationship
 
-- `[PARTIAL]` `AbstractIntegrationTest` and PostgreSQL Testcontainers exist, but
-  are currently used only by the Category repository test.
-- `[TODO]` `ProductJpaRepository`: duplicate name/slug, `...AndIdNot`,
-  `existsByCategoryId`, `findById`, and `findAll`.
-- `[TODO]` `ProductSpecification`: name, status, category ID, min/max price, and
-  combined filters.
-- `[TODO]` `Product.category` mapping: `ManyToOne`, lazy loading, and non-null FK.
-- `[TODO]` `ProductStatus` enum mapping and `price`/`stockQuantity` columns.
-- `[TODO]` Product `@SQLRestriction` and soft-delete behavior.
+- `[PARTIAL]` `AbstractIntegrationTest` and PostgreSQL Testcontainers exist, and
+  Product persistence tests now use them; runtime execution is blocked because
+  Docker is unavailable in the current environment.
+- `[PARTIAL]` `ProductJpaRepository` tests are implemented for duplicate
+  name/slug, `...AndIdNot`, `existsByCategoryId`, `findById`, and `findAll`;
+  runtime verification is blocked until Docker is available.
+- `[PARTIAL]` `ProductSpecification` tests are implemented for name, status,
+  category ID, min/max price, and combined filters; runtime verification is
+  blocked until Docker is available.
+- `[PARTIAL]` `Product.category` mapping tests cover `ManyToOne`, category
+  persistence, and status enum mapping; runtime verification is blocked until
+  Docker is available.
+- `[PARTIAL]` Database constraint tests cover the product price check; stock
+  constraint coverage and runtime verification remain pending.
+- `[PARTIAL]` Product `@SQLRestriction` and soft-delete behavior are covered;
+  runtime verification is blocked until Docker is available.
 - `[TODO]` Auditing of `createdAt`/`updatedAt`, if required behavior.
 - `[TODO]` Flyway migration and database-constraint smoke tests.
 
@@ -140,10 +148,12 @@ Do not mock the application or repository layer.
 
 ## Current coverage summary
 
-Category application unit tests, Category JPA tests, the Catalog domain/utility
-unit tests from section 1, and Testcontainers infrastructure are present. The
-largest gaps are the Product application tests, Web-layer tests, and full
-Category–Product API integration workflows.
+Category and Product application unit tests, Category JPA tests, the Catalog
+domain/utility unit tests from section 1, and Testcontainers infrastructure are
+present. Product persistence/specification tests are implemented but not yet
+runtime-verified because Docker is unavailable in the current environment. The
+largest remaining gaps are Web-layer tests and full Category–Product API
+integration workflows.
 
 Manual requests remain separate at
 [`../http/catalog-exception-cases.http`](../http/catalog-exception-cases.http). They
