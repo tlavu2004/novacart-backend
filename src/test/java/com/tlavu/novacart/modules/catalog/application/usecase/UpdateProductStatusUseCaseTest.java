@@ -3,6 +3,7 @@ package com.tlavu.novacart.modules.catalog.application.usecase;
 import com.tlavu.novacart.modules.catalog.application.exception.specific.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
+import com.tlavu.novacart.modules.catalog.domain.exception.InvalidProductStatusTransitionException;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,7 @@ class UpdateProductStatusUseCaseTest {
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         assertThatThrownBy(() -> useCase.execute(1L, ProductStatus.INACTIVE))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(InvalidProductStatusTransitionException.class)
                 .hasMessageContaining("DRAFT")
                 .hasMessageContaining("INACTIVE");
         verify(productRepository, never()).save(any(Product.class));

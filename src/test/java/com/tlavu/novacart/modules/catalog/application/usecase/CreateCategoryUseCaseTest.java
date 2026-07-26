@@ -30,7 +30,6 @@ public class CreateCategoryUseCaseTest {
     void execute_whenNameAndSlugAreUnique_returnsSavedCategory() {
 
         // Arrange
-        // TODO: slug is hardcoded, assuming SlugUtils.generate() output format. Revisit if SlugUtils algorithm changes.
         Long id = 1L;
         String name = "  Electronics   and   Gadgets  ";
         String normalizedName = name.trim().replaceAll("\\s+", " ");

@@ -26,7 +26,7 @@ public class GetCategoryByIdUseCaseTest {
     private GetCategoryByIdUseCase useCase;
 
     @Test
-        void execute_whenCategoryExists_returnsCategory() {
+    void execute_whenCategoryExists_returnsCategory() {
 
         // Arrange
         Long id = 1L;
