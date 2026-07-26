@@ -133,11 +133,31 @@ Do not mock the application or repository layer.
 
 ### 6. Additional testing when justified
 
-- `[TODO]` Architecture tests (for example, ArchUnit).
-- `[TODO]` API contract tests when other clients depend on the API contract.
-- `[TODO]` Security tests when authentication/authorization is introduced.
-- `[TODO]` Performance/load tests when an SLA or traffic target exists.
-- `[TODO]` End-to-end tests when a frontend or external integration exists.
+These items were reviewed for the current Catalog scope. They are intentionally
+not merge blockers; each item has an explicit adoption trigger.
+
+- `[TODO]` **Architecture tests** (for example, ArchUnit). Add them before
+  extracting Catalog into a separate service, after the intended layer rules
+  are agreed. Current dependencies that require a decision first include:
+  application code importing `infrastructure` utilities/specifications,
+  application code importing the presentation-layer `ProductFilterRequest`,
+  and domain exceptions depending on application/shared exception types.
+- `[TODO]` **API contract tests**. Deferred because the repository has no
+  OpenAPI specification or committed external client. Add them when an API
+  contract becomes versioned or another client depends on it.
+- `[TODO]` **Security tests**. Deferred because Spring Security,
+  authentication, and authorization are not implemented. Add them with the
+  first protected endpoint and role/permission matrix.
+- `[TODO]` **Performance/load tests**. Deferred because no SLA, latency budget,
+  throughput target, or production-like data profile exists. Add them when
+  measurable targets are defined.
+- `[TODO]` **End-to-end tests**. Deferred because there is no frontend or
+  external integration in scope. Add them when a real cross-system user journey
+  exists.
+
+For the current backend-only Catalog merge, sections 1 through 5 are the
+required test gate. Section 6 records future quality gates rather than missing
+current-scope coverage.
 
 ## Current coverage summary
 
