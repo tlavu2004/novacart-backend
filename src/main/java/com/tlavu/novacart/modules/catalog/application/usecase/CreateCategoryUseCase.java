@@ -32,11 +32,7 @@ public class CreateCategoryUseCase {
             throw new DuplicateCategorySlugException(slug);
         }
 
-        Category category = new Category();
-        category.setName(normalizedName);
-        category.setDescription(description);
-        category.setSlug(slug);
-        category.setActive(true);
+        Category category = Category.create(normalizedName, description, slug);
 
         return categoryRepository.save(category);
     }

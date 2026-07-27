@@ -58,18 +58,17 @@ public class UpdateProductUseCase {
                 throw new DuplicateProductSlugException(slug);
             }
 
-            product.setName(normalizedName);
-            product.setSlug(slug);
+            product.rename(normalizedName, slug);
         }
 
         if (description != null) {
 
-            product.setDescription(description);
+            product.changeDescription(description);
         }
 
         if (price != null) {
 
-            product.setPrice(price);
+            product.changePrice(price);
         }
 
         if (categoryId != null) {
@@ -77,7 +76,7 @@ public class UpdateProductUseCase {
             Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
-            product.setCategory(category);
+            product.moveToCategory(category);
         }
 
         return productRepository.save(product);

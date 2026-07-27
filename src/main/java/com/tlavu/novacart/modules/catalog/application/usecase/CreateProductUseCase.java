@@ -44,13 +44,7 @@ public class CreateProductUseCase {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
-        Product product = new Product();
-        product.setName(normalizedName);
-        product.setDescription(description);
-        product.setPrice(price);
-        product.setSlug(slug);
-        product.setStockQuantity(stockQuantity);
-        product.setCategory(category);
+        Product product = Product.create(normalizedName, description, slug, price, stockQuantity, category);
 
         return productRepository.save(product);
     }

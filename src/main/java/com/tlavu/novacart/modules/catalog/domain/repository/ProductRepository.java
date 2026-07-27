@@ -14,7 +14,7 @@ public interface ProductRepository {
     Optional<Product> findById(Long id);
 
     // TODO: Specification couples domain to JPA. Extract domain-level filter abstraction if persistence needs to be swapped.
-    Page<Product> findAll(Specification<Product> specification, Pageable pageable);
+    Page<Product> findAll(Specification<?> specification, Pageable pageable);
 
     boolean existsByNameIgnoreCase(String name);
 

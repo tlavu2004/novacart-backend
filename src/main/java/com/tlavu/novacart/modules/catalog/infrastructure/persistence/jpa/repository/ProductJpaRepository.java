@@ -1,12 +1,12 @@
-package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa;
+package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository;
 
-import com.tlavu.novacart.modules.catalog.domain.entity.Product;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.ProductJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ProductJpaRepository
-        extends JpaRepository<Product, Long>,
-                JpaSpecificationExecutor<Product> {
+        extends JpaRepository<ProductJpaEntity, Long>,
+                JpaSpecificationExecutor<ProductJpaEntity> {
 
     boolean existsByNameIgnoreCase(String name);
 

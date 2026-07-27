@@ -2,7 +2,7 @@ package com.tlavu.novacart.modules.catalog.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.specification.ProductSpecification;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.specification.ProductSpecification;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.ProductFilterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ public class ListProductsUseCase {
 
     public Page<Product> execute(ProductFilterRequest filter, Pageable pageable) {
 
-        Specification<Product> specification = ProductSpecification.withFilter(filter);
+        Specification<?> specification = ProductSpecification.withFilter(filter);
 
         return productRepository.findAll(specification, pageable);
     }

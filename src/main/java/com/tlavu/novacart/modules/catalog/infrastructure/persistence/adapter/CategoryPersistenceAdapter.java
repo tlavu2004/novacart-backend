@@ -2,7 +2,8 @@ package com.tlavu.novacart.modules.catalog.infrastructure.persistence.adapter;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.CategoryJpaRepository;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,19 +20,19 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
     @Override
     public Category save(Category category) {
 
-        return categoryJpaRepository.save(category);
+        return toDomain(categoryJpaRepository.save(toJpaEntity(category)));
     }
 
     @Override
     public Optional<Category> findById(Long id) {
 
-        return categoryJpaRepository.findById(id);
+        return categoryJpaRepository.findById(id).map(this::toDomain);
     }
 
     @Override
     public Page<Category> findAll(Pageable pageable) {
 
-        return categoryJpaRepository.findAll(pageable);
+        return categoryJpaRepository.findAll(pageable).map(this::toDomain);
     }
 
     @Override
@@ -56,5 +57,33 @@ public class CategoryPersistenceAdapter implements CategoryRepository {
     public boolean existsBySlugAndIdNot(String slug, Long id) {
 
         return categoryJpaRepository.existsBySlugAndIdNot(slug, id);
+    }
+
+    private Category toDomain(CategoryJpaEntity entity) {
+
+        return Category.rehydrate(
+                entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getSlug(),
+                entity.isActive(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                entity.getDeletedAt()
+        );
+    }
+
+    private CategoryJpaEntity toJpaEntity(Category category) {
+
+        return CategoryJpaEntity.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .slug(category.getSlug())
+                .active(category.isActive())
+                .createdAt(category.getCreatedAt())
+                .updatedAt(category.getUpdatedAt())
+                .deletedAt(category.getDeletedAt())
+                .build();
     }
 }
