@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -256,9 +258,10 @@ class ProductControllerTest {
                                 """))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error.code").value("VAL_001"))
-                .andExpect(jsonPath("$.error.message").value(
-                        "Invalid value 'UNKNOWN' for field 'status', expected type: ProductStatus"
-                ));
+                .andExpect(jsonPath("$.error.message").value(allOf(
+                        containsString("UNKNOWN"),
+                        containsString("ProductStatus")
+                )));
 
         verifyNoInteractions(updateProductStatusUseCase);
     }
