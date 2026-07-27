@@ -136,6 +136,11 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         ).getContent()).extracting(Product::getId).containsExactly(active.getId());
 
         assertThat(productRepository.findAll(
+                ProductSpecification.withFilter(new ProductFilterRequest("   ", null, null, null, null)),
+                PageRequest.of(0, 10)
+        ).getContent()).extracting(Product::getId).containsExactlyInAnyOrder(active.getId(), draft.getId());
+
+        assertThat(productRepository.findAll(
                 ProductSpecification.withFilter(new ProductFilterRequest(null, ProductStatus.DRAFT, null, null, null)),
                 PageRequest.of(0, 10)
         ).getContent()).extracting(Product::getId).containsExactly(draft.getId());
