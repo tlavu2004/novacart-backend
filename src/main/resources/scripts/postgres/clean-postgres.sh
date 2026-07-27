@@ -25,16 +25,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Go up 5 levels from src/main/resources/scripts/postgres to reach project root
 SERVICE_DIR="$(cd "$SCRIPT_DIR/../../../../.." && pwd)"
 
-ENV_FILENAME=${1:-".env"}
+ENV_FILENAME=${1:-".env.local"}
 ENV_FILE="$SERVICE_DIR/$ENV_FILENAME"
 
-# Check for .env file in service directory
+# Check for the selected environment file in service directory
 if [[ ! -f "$ENV_FILE" ]]; then
   echo -e "${RED}ERROR: Environment file not found at $ENV_FILE${NC}" >&2
   exit 1
 fi
 
-# Load variables from service .env (robustly without requiring quotes)
+# Load variables from the selected environment file (robustly without requiring quotes)
 echo "Loading environment from $ENV_FILE..."
 
 while IFS='=' read -r key value || [[ -n "${key-}" ]]; do
@@ -52,7 +52,7 @@ while IFS='=' read -r key value || [[ -n "${key-}" ]]; do
   fi
 done < "$ENV_FILE"
 
-# Validate required variables (aligned with NovaCart .env)
+# Validate required variables for the selected NovaCart environment
 required_vars=(
   DB_HOST
   DB_PORT
@@ -96,7 +96,7 @@ cd "$SERVICE_DIR" || {
   exit 1
 }
 
-# Run Flyway clean with explicit parameters from .env
+# Run Flyway clean with explicit parameters from the selected environment file
 mvn flyway:clean \
   -Dflyway.cleanDisabled=false \
   -Dflyway.url="jdbc:postgresql://$DB_HOST:$DB_PORT/$DB_NAME" \

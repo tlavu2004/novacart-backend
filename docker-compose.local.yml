@@ -9,14 +9,14 @@ services:
       - "${DB_PORT:-5432}:5432"
 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_local_data:/var/lib/postgresql/data
 
     networks:
-      - novacart-network
+      - novacart-local-network
 
 volumes:
-  postgres_data:
+  postgres_local_data:
 
 networks:
-  novacart-network:
+  novacart-local-network:
     driver: bridge

@@ -31,7 +31,7 @@ public class UpdateCategoryUseCase {
 
         if (name != null) {
 
-            String normalizedName = name.trim();
+            String normalizedName = name.trim().replaceAll("\\s+", " ");
 
             if (normalizedName.isEmpty()) {
 

@@ -16,7 +16,7 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
-    <springProfile name="dev,test">
+    <springProfile name="local,test">
         <logger name="com.tlavu.novacart" level="DEBUG"/>
         <logger name="org.hibernate.SQL" level="DEBUG"/>
     </springProfile>
