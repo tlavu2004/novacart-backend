@@ -26,21 +26,6 @@ public class Product {
     private Instant deletedAt;
     private Category category;
 
-    private Product(Long id, String name, String description, String slug, ProductStatus status, BigDecimal price,
-                    Integer stockQuantity, Category category, Instant createdAt, Instant updatedAt, Instant deletedAt) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.slug = slug;
-        this.status = status;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.category = category;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
-    }
-
     public static Product create(
             String name,
             String description,
@@ -50,48 +35,15 @@ public class Product {
             Category category
     ) {
 
-        return new Product(
-                null,
-                name,
-                description,
-                slug,
-                ProductStatus.DRAFT,
-                price,
-                stockQuantity,
-                category,
-                null,
-                null,
-                null
-        );
-    }
+        Product product = new Product();
+        product.name = name;
+        product.description = description;
+        product.slug = slug;
+        product.price = price;
+        product.stockQuantity = stockQuantity;
+        product.category = category;
 
-    public static Product rehydrate(
-            Long id,
-            String name,
-            String description,
-            String slug,
-            ProductStatus status,
-            BigDecimal price,
-            Integer stockQuantity,
-            Category category,
-            Instant createdAt,
-            Instant updatedAt,
-            Instant deletedAt
-    ) {
-
-        return new Product(
-                id,
-                name,
-                description,
-                slug,
-                status,
-                price,
-                stockQuantity,
-                category,
-                createdAt,
-                updatedAt,
-                deletedAt
-        );
+        return product;
     }
 
     public void rename(String name, String slug) {

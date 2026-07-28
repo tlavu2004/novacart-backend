@@ -6,29 +6,9 @@ import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.conf
 import org.mapstruct.Mapper;
 
 @Mapper(config = MapStructPersistenceConfig.class)
-public abstract class CategoryPersistenceMapper {
+public interface CategoryPersistenceMapper {
 
-    public abstract CategoryJpaEntity toJpaEntity(Category category);
+    CategoryJpaEntity toJpaEntity(Category category);
 
-    abstract CategoryRehydrationState toRehydration(CategoryJpaEntity entity);
-
-    public Category toDomain(CategoryJpaEntity entity) {
-
-        if (entity == null) {
-            return null;
-        }
-
-        CategoryRehydrationState state = toRehydration(entity);
-
-        return Category.rehydrate(
-                state.id(),
-                state.name(),
-                state.description(),
-                state.slug(),
-                state.active(),
-                state.createdAt(),
-                state.updatedAt(),
-                state.deletedAt()
-        );
-    }
+    Category toDomain(CategoryJpaEntity entity);
 }

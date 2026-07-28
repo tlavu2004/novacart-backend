@@ -42,29 +42,6 @@ public class Category {
         );
     }
 
-    public static Category rehydrate(
-            Long id,
-            String name,
-            String description,
-            String slug,
-            boolean active,
-            Instant createdAt,
-            Instant updatedAt,
-            Instant deletedAt
-    ) {
-
-        return new Category(
-                id,
-                name,
-                description,
-                slug,
-                active,
-                createdAt,
-                updatedAt,
-                deletedAt
-        );
-    }
-
     public void rename(String name, String slug) {
 
         this.name = name;

@@ -10,32 +10,9 @@ import org.mapstruct.Mapper;
         config = MapStructPersistenceConfig.class,
         uses = CategoryPersistenceMapper.class
 )
-public abstract class ProductPersistenceMapper {
+public interface ProductPersistenceMapper {
 
-    public abstract ProductJpaEntity toJpaEntity(Product product);
+    ProductJpaEntity toJpaEntity(Product product);
 
-    abstract ProductRehydrationState toRehydration(ProductJpaEntity entity);
-
-    public Product toDomain(ProductJpaEntity entity) {
-
-        if (entity == null) {
-            return null;
-        }
-
-        ProductRehydrationState state = toRehydration(entity);
-
-        return Product.rehydrate(
-                state.id(),
-                state.name(),
-                state.description(),
-                state.slug(),
-                state.status(),
-                state.price(),
-                state.stockQuantity(),
-                state.category(),
-                state.createdAt(),
-                state.updatedAt(),
-                state.deletedAt()
-        );
-    }
+    Product toDomain(ProductJpaEntity entity);
 }
