@@ -223,6 +223,28 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         Page<ProductJpaEntity> result = productRepository.findAll(specification, PageRequest.of(0, 10));
 
         assertThat(result.getContent()).extracting(ProductJpaEntity::getId).containsExactly(matching.getId());
+        assertThat(Hibernate.isInitialized(result.getContent().getFirst().getCategory())).isTrue();
+    }
+
+    @Test
+    void findWithCategoryById_fetchesCategory() {
+
+        CategoryJpaEntity category = persistCategory("Electronics", "electronics");
+        ProductJpaEntity product = persistProduct(
+                "Wireless Mouse",
+                "wireless-mouse",
+                category,
+                ProductStatus.DRAFT,
+                "19.90",
+                4
+        );
+
+        clearPersistenceContext();
+
+        ProductJpaEntity result = productRepository.findWithCategoryById(product.getId()).orElseThrow();
+
+        assertThat(Hibernate.isInitialized(result.getCategory())).isTrue();
+        assertThat(result.getCategory().getId()).isEqualTo(category.getId());
     }
 
     @Test

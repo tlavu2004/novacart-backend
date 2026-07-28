@@ -32,7 +32,7 @@ public class ProductPersistenceAdapter implements ProductRepository {
     @Override
     public Optional<Product> findById(Long id) {
 
-        return productJpaRepository.findById(id).map(productPersistenceMapper::toDomain);
+        return productJpaRepository.findWithCategoryById(id).map(productPersistenceMapper::toDomain);
     }
 
     @Override
