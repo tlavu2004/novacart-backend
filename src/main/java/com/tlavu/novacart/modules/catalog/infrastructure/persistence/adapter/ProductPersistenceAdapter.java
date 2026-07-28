@@ -2,13 +2,14 @@ package com.tlavu.novacart.modules.catalog.infrastructure.persistence.adapter;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.SortOrder;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository.ProductJpaRepository;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.ProductJpaEntity;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity.ProductPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -35,11 +36,20 @@ public class ProductPersistenceAdapter implements ProductRepository {
     }
 
     @Override
-    public Page<Product> findAll(Specification<?> specification, Pageable pageable) {
+    public PageResult<Product> findAll(ProductFilter filter, PageRequest pageRequest) {
 
-        @SuppressWarnings("unchecked")
-        Specification<ProductJpaEntity> jpaSpecification = (Specification<ProductJpaEntity>) specification;
-        return productJpaRepository.findAll(jpaSpecification, pageable).map(productPersistenceMapper::toDomain);
+        org.springframework.data.domain.Page<Product> page = productJpaRepository.findAll(
+                ProductSpecification.withFilter(filter),
+                toPageable(pageRequest)
+        ).map(productPersistenceMapper::toDomain);
+
+        return new PageResult<>(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
     @Override
@@ -68,6 +78,25 @@ public class ProductPersistenceAdapter implements ProductRepository {
     public boolean existsByCategoryId(Long id) {
 
         return productJpaRepository.existsByCategoryId(id);
+    }
+
+    private org.springframework.data.domain.Pageable toPageable(PageRequest pageRequest) {
+
+        org.springframework.data.domain.Sort sort = org.springframework.data.domain.Sort.by(
+                pageRequest.sortOrders().stream()
+                        .map(this::toSortOrder)
+                        .toList()
+        );
+
+        return org.springframework.data.domain.PageRequest.of(pageRequest.page(), pageRequest.size(), sort);
+    }
+
+    private org.springframework.data.domain.Sort.Order toSortOrder(SortOrder sortOrder) {
+
+        return new org.springframework.data.domain.Sort.Order(
+                org.springframework.data.domain.Sort.Direction.valueOf(sortOrder.direction().name()),
+                sortOrder.property()
+        );
     }
 
 }

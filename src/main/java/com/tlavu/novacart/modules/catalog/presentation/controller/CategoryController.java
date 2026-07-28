@@ -2,7 +2,9 @@ package com.tlavu.novacart.modules.catalog.presentation.controller;
 
 import com.tlavu.novacart.modules.catalog.application.usecase.*;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageResult;
 import com.tlavu.novacart.modules.catalog.infrastructure.validation.SortValidator;
+import com.tlavu.novacart.modules.catalog.presentation.mapper.PageRequestMapper;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.CreateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.UpdateCategoryRequest;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.CategoryResponse;
@@ -10,7 +12,6 @@ import com.tlavu.novacart.shared.presentation.dto.response.ApiResponse;
 import com.tlavu.novacart.shared.presentation.dto.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,19 +56,19 @@ public class CategoryController {
 
         SortValidator.validate(pageable, ALLOWED_SORT_PROPERTIES);
 
-        Page<Category> pages = listCategoriesUseCase.execute(pageable);
+        PageResult<Category> pages = listCategoriesUseCase.execute(PageRequestMapper.toDomain(pageable));
 
-        List<CategoryResponse> content = pages.getContent()
+        List<CategoryResponse> content = pages.content()
                 .stream()
                 .map(CategoryResponse::from)
                 .toList();
 
         PageResponse<CategoryResponse> response = new PageResponse<>(
                 content,
-                pages.getNumber(),
-                pages.getSize(),
-                pages.getTotalElements(),
-                pages.getTotalPages()
+                pages.page(),
+                pages.size(),
+                pages.totalElements(),
+                pages.totalPages()
         );
 
         return ResponseEntity.status(HttpStatus.OK)

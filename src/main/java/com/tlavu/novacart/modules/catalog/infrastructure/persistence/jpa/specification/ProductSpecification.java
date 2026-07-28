@@ -1,15 +1,15 @@
 package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.specification;
 
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.ProductFilter;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.ProductJpaEntity;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.ProductFilterRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 
 public class ProductSpecification {
 
-    public static Specification<ProductJpaEntity> withFilter(ProductFilterRequest filter) {
+    public static Specification<ProductJpaEntity> withFilter(ProductFilter filter) {
 
         return alwaysTrue()
                 .and(hasName(filter.name()))

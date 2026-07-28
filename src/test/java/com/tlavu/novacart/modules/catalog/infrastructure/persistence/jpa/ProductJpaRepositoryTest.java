@@ -7,7 +7,7 @@ import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository.ProductJpaRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.specification.ProductSpecification;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.ProductFilterRequest;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.ProductFilter;
 import com.tlavu.novacart.support.AbstractIntegrationTest;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Hibernate;
@@ -210,7 +210,7 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
 
         clearPersistenceContext();
 
-        ProductFilterRequest filter = new ProductFilterRequest(
+        ProductFilter filter = new ProductFilter(
                 "mouse",
                 ProductStatus.ACTIVE,
                 electronics.getId(),
@@ -253,7 +253,7 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         assertThat(
                 productRepository.findAll(
                         ProductSpecification.withFilter(
-                                new ProductFilterRequest(
+                                new ProductFilter(
                                         "mouse",
                                         null,
                                         null,
@@ -268,7 +268,7 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         assertThat(
                 productRepository.findAll(
                         ProductSpecification.withFilter(
-                                new ProductFilterRequest(
+                                new ProductFilter(
                                         "   ",
                                         null,
                                         null,
@@ -283,7 +283,7 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         assertThat(
                 productRepository.findAll(
                         ProductSpecification.withFilter(
-                                new ProductFilterRequest(
+                                new ProductFilter(
                                         null,
                                         ProductStatus.DRAFT,
                                         null,
@@ -296,7 +296,7 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
 
         assertThat(productRepository.findAll(
                 ProductSpecification.withFilter(
-                        new ProductFilterRequest(
+                        new ProductFilter(
                                 null,
                                 null,
                                 electronics.getId(),

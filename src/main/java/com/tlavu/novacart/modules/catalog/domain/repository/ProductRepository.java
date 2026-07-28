@@ -1,9 +1,9 @@
 package com.tlavu.novacart.modules.catalog.domain.repository;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.ProductFilter;
 
 import java.util.Optional;
 
@@ -13,8 +13,7 @@ public interface ProductRepository {
 
     Optional<Product> findById(Long id);
 
-    // TODO: Specification couples domain to JPA. Extract domain-level filter abstraction if persistence needs to be swapped.
-    Page<Product> findAll(Specification<?> specification, Pageable pageable);
+    PageResult<Product> findAll(ProductFilter filter, PageRequest pageRequest);
 
     boolean existsByNameIgnoreCase(String name);
 
