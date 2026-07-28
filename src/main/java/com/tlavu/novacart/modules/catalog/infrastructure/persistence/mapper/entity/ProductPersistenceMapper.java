@@ -1,8 +1,7 @@
-package com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.product;
+package com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.ProductJpaEntity;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.category.CategoryPersistenceMapper;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.config.MapStructPersistenceConfig;
 import org.mapstruct.Mapper;
 

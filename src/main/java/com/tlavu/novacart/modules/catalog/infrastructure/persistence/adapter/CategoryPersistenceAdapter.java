@@ -3,7 +3,7 @@ package com.tlavu.novacart.modules.catalog.infrastructure.persistence.adapter;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.category.CategoryPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity.CategoryPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

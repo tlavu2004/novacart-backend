@@ -5,10 +5,10 @@ import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.ProductJpaEntity;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.category.CategoryPersistenceMapper;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.category.CategoryPersistenceMapperImpl;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.product.ProductPersistenceMapper;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.product.ProductPersistenceMapperImpl;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity.CategoryPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity.CategoryPersistenceMapperImpl;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity.ProductPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity.ProductPersistenceMapperImpl;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

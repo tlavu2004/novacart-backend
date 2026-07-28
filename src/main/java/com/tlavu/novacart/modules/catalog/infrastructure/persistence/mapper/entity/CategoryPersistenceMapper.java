@@ -1,4 +1,4 @@
-package com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.category;
+package com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.CategoryJpaEntity;

@@ -4,7 +4,7 @@ import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.repository.ProductRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository.ProductJpaRepository;
 import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.ProductJpaEntity;
-import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.product.ProductPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper.entity.ProductPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
