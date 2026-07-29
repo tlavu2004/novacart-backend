@@ -13,14 +13,14 @@ This document consolidates unchecked work from the original Week 1–2 debt list
 
 - [x] **TD-01 — Feature boundaries:** Category and Product are separated by feature; `CategoryProductUsagePort` removes the reverse repository dependency.
 - [x] **TD-02 — Architecture tests:** ArchUnit runs in `mvn verify` and protects Domain isolation, Application/Presentation-to-Infrastructure direction, and the Category Application boundary.
-- [ ] **TD-03 — OpenAPI and API contract tests:** version the OpenAPI contract and add contract tests for important Catalog endpoints.
+- [x] **TD-03 — OpenAPI and API contract tests:** OpenAPI is versioned as `v1`; an integration contract test protects the Catalog paths in `/v3/api-docs`.
 - [x] **TD-04 — Exception hierarchy and HTTP mapping:** domain status-transition exceptions are plain Java; Application translates them to `CatalogErrorCode` business errors, with `PROD_004` protected by controller tests.
 - [x] **TD-13 — Reversed dependency direction:** Application and Presentation no longer import Catalog Infrastructure.
 - [ ] **TD-14 — Uncontrolled domain setters:** remove public business-state setters from `Category` and `Product` while preserving explicit mapping and invariants.
 
 | ID | Work item | Trigger/source | Definition of done |
 | --- | --- | --- | --- |
-| TD-03 | OpenAPI and API contract tests | Day 12 | The contract runs in CI and detects breaking changes. |
+| TD-03 | OpenAPI and API contract tests | Day 12 | **Completed:** `/v3/api-docs` exposes the `v1` Catalog contract; the integration test verifies the important Catalog paths. |
 | TD-14 | Public domain setters | Day 14 review | Business state has no public setters; mapper and domain tests pass. |
 
 ## Next
