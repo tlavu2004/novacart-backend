@@ -139,6 +139,17 @@ class CatalogApiIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void openApiSpec_exposesVersionedCatalogContract() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.info.title").value("NovaCart API"))
+                .andExpect(jsonPath("$.info.version").value("v1"))
+                .andExpect(jsonPath("$.paths['/api/v1/categories']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/products']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/products/{id}']").exists());
+    }
+
+    @Test
     void productReadEndpoints_serializeResponsesWithoutLazyLoadingOrNPlusOne() throws Exception {
         String suffix = UUID.randomUUID().toString().substring(0, 8);
         long categoryId = createCategory("Read category " + suffix);
