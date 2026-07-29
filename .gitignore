@@ -36,3 +36,11 @@ build/
 .env
 .env.local
 .env.test
+
+### Documentation ###
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+*~
+docs/**/site/
