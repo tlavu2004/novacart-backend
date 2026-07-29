@@ -1,4 +1,4 @@
-package com.tlavu.novacart.modules.catalog.shared.domain.exception;
+package com.tlavu.novacart.modules.catalog.shared.application.exception.code.catalog;
 
 import com.tlavu.novacart.shared.application.exception.code.contract.ErrorCode;
 import lombok.Getter;

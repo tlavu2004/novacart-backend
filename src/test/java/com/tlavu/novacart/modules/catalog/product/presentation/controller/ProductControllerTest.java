@@ -12,7 +12,7 @@ import com.tlavu.novacart.modules.catalog.product.application.usecase.UpdateProd
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.product.domain.enums.ProductStatus;
-import com.tlavu.novacart.modules.catalog.product.domain.exception.InvalidProductStatusTransitionException;
+import com.tlavu.novacart.modules.catalog.product.application.exception.InvalidProductStatusTransitionException;
 import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
 import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
 import com.tlavu.novacart.modules.catalog.shared.domain.query.SortDirection;
