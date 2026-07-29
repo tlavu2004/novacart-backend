@@ -7,13 +7,12 @@ import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.domain.exception.InvalidProductStatusTransitionException;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.ProductFilterRequest;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.SortDirection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -82,9 +81,8 @@ class ProductControllerTest {
 
     @Test
     void listProducts_withFiltersPaginationAndSort_returnsMappedPage() throws Exception {
-        PageRequest pageable = PageRequest.of(0, 5);
-        when(listProductsUseCase.execute(any(ProductFilterRequest.class), any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(product()), pageable, 1));
+        when(listProductsUseCase.execute(any(ProductFilter.class), any()))
+                .thenReturn(new PageResult<>(List.of(product()), 0, 5, 1, 1));
 
         mockMvc.perform(get("/api/v1/products")
                         .queryParam("name", "mouse")
@@ -107,7 +105,9 @@ class ProductControllerTest {
                         && Long.valueOf(7L).equals(filter.categoryId())
                         && new BigDecimal("10.00").compareTo(filter.minPrice()) == 0
                         && new BigDecimal("30.00").compareTo(filter.maxPrice()) == 0),
-                argThat(page -> page.getSort().getOrderFor("price") != null)
+                argThat(page -> page.sortOrders().stream().anyMatch(order ->
+                        order.property().equals("price") && order.direction() == SortDirection.DESC
+                ))
         );
     }
 

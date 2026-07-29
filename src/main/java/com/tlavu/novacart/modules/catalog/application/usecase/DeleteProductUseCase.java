@@ -23,7 +23,7 @@ public class DeleteProductUseCase {
 
         // TODO: Check for active orders (PENDING/CONFIRMED) before deleting. Implement after Order module is completed
 
-        product.setDeletedAt(Instant.now());
+        product.softDelete(Instant.now());
 
         productRepository.save(product);
     }

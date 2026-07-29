@@ -30,8 +30,7 @@ public class DeleteCategoryUseCase {
 
         Instant now = Instant.now();
 
-        category.setActive(false);
-        category.setDeletedAt(now);
+        category.softDelete(now);
 
         categoryRepository.save(category);
     }

@@ -53,18 +53,17 @@ public class UpdateCategoryUseCase {
                 throw new DuplicateCategorySlugException(slug);
             }
 
-            category.setName(normalizedName);
-            category.setSlug(slug);
+            category.rename(normalizedName, slug);
         }
 
         if (description != null) {
 
-            category.setDescription(description);
+            category.changeDescription(description);
         }
 
         if (active != null) {
 
-            category.setActive(active);
+            category.changeActive(active);
         }
 
         return categoryRepository.save(category);

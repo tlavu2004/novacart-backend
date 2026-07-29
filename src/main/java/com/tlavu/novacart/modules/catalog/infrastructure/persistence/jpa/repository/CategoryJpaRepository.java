@@ -1,9 +1,9 @@
-package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa;
+package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository;
 
-import com.tlavu.novacart.modules.catalog.domain.entity.Category;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CategoryJpaRepository extends JpaRepository<Category, Long> {
+public interface CategoryJpaRepository extends JpaRepository<CategoryJpaEntity, Long> {
 
     boolean existsByNameIgnoreCase(String name);
 

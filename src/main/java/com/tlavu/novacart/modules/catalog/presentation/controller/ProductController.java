@@ -2,14 +2,16 @@ package com.tlavu.novacart.modules.catalog.presentation.controller;
 
 import com.tlavu.novacart.modules.catalog.application.usecase.*;
 import com.tlavu.novacart.modules.catalog.domain.entity.Product;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.ProductFilter;
 import com.tlavu.novacart.modules.catalog.infrastructure.validation.SortValidator;
+import com.tlavu.novacart.modules.catalog.presentation.mapper.PageRequestMapper;
 import com.tlavu.novacart.modules.catalog.presentation.dto.request.*;
 import com.tlavu.novacart.modules.catalog.presentation.dto.response.ProductResponse;
 import com.tlavu.novacart.shared.presentation.dto.response.ApiResponse;
 import com.tlavu.novacart.shared.presentation.dto.response.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,19 +60,28 @@ public class ProductController {
 
         SortValidator.validate(pageable, ALLOWED_SORT_PROPERTIES);
 
-        Page<Product> pages = listProductsUseCase.execute(filter, pageable);
+        PageResult<Product> pages = listProductsUseCase.execute(
+                new ProductFilter(
+                        filter.name(),
+                        filter.status(),
+                        filter.categoryId(),
+                        filter.minPrice(),
+                        filter.maxPrice()
+                ),
+                PageRequestMapper.toDomain(pageable)
+        );
 
-        List<ProductResponse> content = pages.getContent()
+        List<ProductResponse> content = pages.content()
                 .stream()
                 .map(ProductResponse::from)
                 .toList();
 
         PageResponse<ProductResponse> response = new PageResponse<>(
                 content,
-                pages.getNumber(),
-                pages.getSize(),
-                pages.getTotalElements(),
-                pages.getTotalPages()
+                pages.page(),
+                pages.size(),
+                pages.totalElements(),
+                pages.totalPages()
         );
 
         return ResponseEntity.status(HttpStatus.OK)

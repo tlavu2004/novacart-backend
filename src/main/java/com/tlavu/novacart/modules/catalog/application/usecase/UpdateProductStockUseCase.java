@@ -19,7 +19,7 @@ public class UpdateProductStockUseCase {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        product.setStockQuantity(stockQuantity);
+        product.changeStock(stockQuantity);
 
         return productRepository.save(product);
     }

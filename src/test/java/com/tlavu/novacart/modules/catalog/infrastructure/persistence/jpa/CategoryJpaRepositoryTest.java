@@ -1,6 +1,7 @@
 package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa;
 
-import com.tlavu.novacart.modules.catalog.domain.entity.Category;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
 import com.tlavu.novacart.support.AbstractIntegrationTest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,13 @@ class CategoryJpaRepositoryTest extends AbstractIntegrationTest {
     void existsByNameIgnoreCase_whenMatchingCategoryExists_returnsTrue() {
 
         // Arrange
-        categoryRepository.saveAndFlush(category("Electronics", "electronics"));
+        categoryRepository.saveAndFlush(
+                CategoryJpaEntity(
+                        "Electronics",
+                        "electronics"
+                )
+        );
+
         clearPersistenceContext();
 
         // Act & Assert
@@ -39,7 +46,13 @@ class CategoryJpaRepositoryTest extends AbstractIntegrationTest {
     void existsBySlug_whenMatchingCategoryExists_returnsTrue() {
 
         // Arrange
-        categoryRepository.saveAndFlush(category("Electronics", "electronics"));
+        categoryRepository.saveAndFlush(
+                CategoryJpaEntity(
+                        "Electronics",
+                        "electronics"
+                )
+        );
+
         clearPersistenceContext();
 
         // Act & Assert
@@ -51,8 +64,14 @@ class CategoryJpaRepositoryTest extends AbstractIntegrationTest {
     void existsByNameOrSlugAndIdNot_excludesTheCurrentCategory() {
 
         // Arrange
-        Category electronics = categoryRepository.saveAndFlush(category("Electronics", "electronics"));
-        Category apparel = categoryRepository.saveAndFlush(category("Apparel", "apparel"));
+        CategoryJpaEntity electronics = categoryRepository.saveAndFlush(
+                CategoryJpaEntity(
+                        "Electronics",
+                        "electronics"
+                )
+        );
+
+        CategoryJpaEntity apparel = categoryRepository.saveAndFlush(CategoryJpaEntity("Apparel", "apparel"));
         clearPersistenceContext();
 
         // Act & Assert
@@ -68,8 +87,20 @@ class CategoryJpaRepositoryTest extends AbstractIntegrationTest {
     void findMethods_whenCategoryIsSoftDeleted_excludeItFromResults() {
 
         // Arrange
-        Category visibleCategory = categoryRepository.saveAndFlush(category("Electronics", "electronics"));
-        Category deletedCategory = categoryRepository.saveAndFlush(category("Archived", "archived"));
+        CategoryJpaEntity visibleCategory = categoryRepository.saveAndFlush(
+                CategoryJpaEntity(
+                        "Electronics",
+                        "electronics"
+                )
+        );
+
+        CategoryJpaEntity deletedCategory = categoryRepository.saveAndFlush(
+                CategoryJpaEntity(
+                        "Archived",
+                        "archived"
+                )
+        );
+
         deletedCategory.setDeletedAt(Instant.now());
         categoryRepository.saveAndFlush(deletedCategory);
         clearPersistenceContext();
@@ -78,16 +109,16 @@ class CategoryJpaRepositoryTest extends AbstractIntegrationTest {
         assertThat(categoryRepository.findById(visibleCategory.getId())).isPresent();
         assertThat(categoryRepository.findById(deletedCategory.getId())).isEmpty();
         assertThat(categoryRepository.findAll())
-                .extracting(Category::getId)
+                .extracting(CategoryJpaEntity::getId)
                 .containsExactly(visibleCategory.getId());
         assertThat(categoryRepository.existsByNameIgnoreCase("Archived")).isFalse();
         assertThat(categoryRepository.existsBySlug("archived")).isFalse();
     }
 
-    private Category category(String name, String slug) {
+    private CategoryJpaEntity CategoryJpaEntity(String name, String slug) {
 
         Instant now = Instant.now();
-        return Category.builder()
+        return CategoryJpaEntity.builder()
                 .name(name)
                 .slug(slug)
                 .description(name + " description")

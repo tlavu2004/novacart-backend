@@ -1,73 +1,89 @@
 package com.tlavu.novacart.modules.catalog.domain.entity;
 
-import com.tlavu.novacart.modules.catalog.domain.exception.InvalidProductStatusTransitionException;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
+import com.tlavu.novacart.modules.catalog.domain.exception.InvalidProductStatusTransitionException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Entity
-@Table(name = "products")
-@EntityListeners(AuditingEntityListener.class)
-@SQLRestriction("deleted_at IS NULL")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
-
-    @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "description", columnDefinition = "text")
     private String description;
-
-    @Column(name = "slug", nullable = false)
     private String slug;
-
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Setter(AccessLevel.NONE)
     private ProductStatus status = ProductStatus.DRAFT;
-
-    @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
-
-    @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
-
-    @Column(name = "deleted_at")
     private Instant deletedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    public static Product create(
+            String name,
+            String description,
+            String slug,
+            BigDecimal price,
+            Integer stockQuantity,
+            Category category
+    ) {
+
+        Product product = new Product();
+        product.name = name;
+        product.description = description;
+        product.slug = slug;
+        product.price = price;
+        product.stockQuantity = stockQuantity;
+        product.category = category;
+
+        return product;
+    }
+
+    public void rename(String name, String slug) {
+
+        this.name = name;
+        this.slug = slug;
+    }
+
+    public void changeDescription(String description) {
+
+        this.description = description;
+    }
+
+    public void changePrice(BigDecimal price) {
+
+        this.price = price;
+    }
+
+    public void changeStock(Integer stockQuantity) {
+
+        this.stockQuantity = stockQuantity;
+    }
+
+    public void moveToCategory(Category category) {
+
+        this.category = category;
+    }
+
+    public void softDelete(Instant deletedAt) {
+
+        this.deletedAt = deletedAt;
+    }
+
     public void changeStatus(ProductStatus newStatus) {
+
         if (!this.status.canTransitionTo(newStatus)) {
+
             throw new InvalidProductStatusTransitionException(this.status, newStatus);
         }
+
         this.status = newStatus;
     }
 }

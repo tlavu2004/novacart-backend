@@ -1,15 +1,16 @@
-package com.tlavu.novacart.modules.catalog.infrastructure.persistence.specification;
+package com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.specification;
 
-import com.tlavu.novacart.modules.catalog.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.domain.enums.ProductStatus;
-import com.tlavu.novacart.modules.catalog.presentation.dto.request.ProductFilterRequest;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.infrastructure.persistence.jpa.entity.ProductJpaEntity;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 
 public class ProductSpecification {
 
-    public static Specification<Product> withFilter(ProductFilterRequest filter) {
+    public static Specification<ProductJpaEntity> withFilter(ProductFilter filter) {
+
         return alwaysTrue()
                 .and(hasName(filter.name()))
                 .and(hasStatus(filter.status()))
@@ -18,11 +19,12 @@ public class ProductSpecification {
                 .and(hasPriceLessThanOrEqual(filter.maxPrice()));
     }
 
-    private static Specification<Product> alwaysTrue() {
+    private static Specification<ProductJpaEntity> alwaysTrue() {
+
         return (root, query, cb) -> null;  // match all, no WHERE condition
     }
 
-    private static Specification<Product> hasName(String name) {
+    private static Specification<ProductJpaEntity> hasName(String name) {
 
         return (name == null || name.isBlank())
                 ? null
@@ -33,7 +35,7 @@ public class ProductSpecification {
                     );
     }
 
-    private static Specification<Product> hasStatus(ProductStatus status) {
+    private static Specification<ProductJpaEntity> hasStatus(ProductStatus status) {
 
         return (status == null)
                 ? null
@@ -44,7 +46,7 @@ public class ProductSpecification {
                     );
     }
 
-    private static Specification<Product> hasCategoryId(Long categoryId) {
+    private static Specification<ProductJpaEntity> hasCategoryId(Long categoryId) {
 
         return (categoryId == null)
                 ? null
@@ -55,7 +57,7 @@ public class ProductSpecification {
                     );
     }
 
-    private static Specification<Product> hasPriceGreaterThanOrEqual(BigDecimal minPrice) {
+    private static Specification<ProductJpaEntity> hasPriceGreaterThanOrEqual(BigDecimal minPrice) {
 
         return (minPrice == null)
                 ? null
@@ -66,7 +68,7 @@ public class ProductSpecification {
                     );
     }
 
-    private static Specification<Product> hasPriceLessThanOrEqual(BigDecimal maxPrice) {
+    private static Specification<ProductJpaEntity> hasPriceLessThanOrEqual(BigDecimal maxPrice) {
 
         return (maxPrice == null)
                 ? null

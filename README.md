@@ -43,7 +43,9 @@ cp .env.test.example .env.test
 Required database variables include:
 
 ```text
+SPRING_PROFILES_ACTIVE SERVER_PORT
 DB_HOST DB_PORT DB_NAME DB_USERNAME DB_PASSWORD
+SPRING_JPA_HIBERNATE_DDL_AUTO SPRING_JPA_SHOW_SQL SPRING_JPA_HIBERNATE_FORMAT_SQL
 ```
 
 Passwords are required by Compose and have no production-safe defaults.

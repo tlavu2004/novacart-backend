@@ -4,12 +4,11 @@ import com.tlavu.novacart.modules.catalog.application.exception.specific.Categor
 import com.tlavu.novacart.modules.catalog.application.exception.specific.CategoryNotFoundException;
 import com.tlavu.novacart.modules.catalog.application.usecase.*;
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.SortDirection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -71,9 +70,8 @@ class CategoryControllerTest {
 
     @Test
     void listCategories_withPaginationAndSort_returnsMappedPage() throws Exception {
-        PageRequest pageable = PageRequest.of(0, 10);
-        when(listCategoriesUseCase.execute(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(category()), pageable, 1));
+        when(listCategoriesUseCase.execute(any()))
+                .thenReturn(new PageResult<>(List.of(category()), 0, 10, 1, 1));
 
         mockMvc.perform(get("/api/v1/categories")
                         .queryParam("page", "0")
@@ -87,9 +85,11 @@ class CategoryControllerTest {
                 .andExpect(jsonPath("$.data.totalPages").value(1));
 
         verify(listCategoriesUseCase).execute(argThat(page ->
-                page.getPageNumber() == 0
-                        && page.getPageSize() == 10
-                        && page.getSort().getOrderFor("name") != null
+                page.page() == 0
+                        && page.size() == 10
+                        && page.sortOrders().stream().anyMatch(order ->
+                                order.property().equals("name") && order.direction() == SortDirection.ASC
+                        )
         ));
     }
 

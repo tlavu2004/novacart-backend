@@ -2,9 +2,9 @@ package com.tlavu.novacart.modules.catalog.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.domain.repository.CategoryRepository;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.domain.repository.query.PageResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +15,8 @@ public class ListCategoriesUseCase {
 
     private final CategoryRepository categoryRepository;
 
-    public Page<Category> execute(Pageable pageable) {
+    public PageResult<Category> execute(PageRequest pageRequest) {
 
-        return categoryRepository.findAll(pageable);
+        return categoryRepository.findAll(pageRequest);
     }
 }
