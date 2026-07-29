@@ -1,0 +1,123 @@
+package com.tlavu.novacart.modules.catalog.category.presentation.controller;
+
+import com.tlavu.novacart.modules.catalog.category.application.usecase.CreateCategoryUseCase;
+import com.tlavu.novacart.modules.catalog.category.application.usecase.DeleteCategoryUseCase;
+import com.tlavu.novacart.modules.catalog.category.application.usecase.GetCategoryByIdUseCase;
+import com.tlavu.novacart.modules.catalog.category.application.usecase.ListCategoriesUseCase;
+import com.tlavu.novacart.modules.catalog.category.application.usecase.UpdateCategoryUseCase;
+import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
+import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.shared.presentation.validation.SortValidator;
+import com.tlavu.novacart.modules.catalog.shared.presentation.mapper.PageRequestMapper;
+import com.tlavu.novacart.modules.catalog.category.presentation.dto.request.CreateCategoryRequest;
+import com.tlavu.novacart.modules.catalog.category.presentation.dto.request.UpdateCategoryRequest;
+import com.tlavu.novacart.modules.catalog.category.presentation.dto.response.CategoryResponse;
+import com.tlavu.novacart.shared.presentation.dto.response.ApiResponse;
+import com.tlavu.novacart.shared.presentation.dto.response.PageResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
+
+@RestController
+@RequestMapping("/api/v1/categories")
+@RequiredArgsConstructor
+public class CategoryController {
+
+    private final GetCategoryByIdUseCase getCategoryByIdUseCase;
+    private final ListCategoriesUseCase listCategoriesUseCase;
+    private final CreateCategoryUseCase createCategoryUseCase;
+    private final UpdateCategoryUseCase updateCategoryUseCase;
+    private final DeleteCategoryUseCase deleteCategoryUseCase;
+
+    private static final Set<String> ALLOWED_SORT_PROPERTIES = Set.of(
+            "name",
+            "createdAt",
+            "updatedAt"
+    );
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
+            @PathVariable Long id
+    ) {
+
+        Category category = getCategoryByIdUseCase.execute(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(CategoryResponse.from(category)));
+    }
+
+    // TODO: Consider adding CategoryFilterRequest (e.g. filter by `active`, `name`) when there's a real need — not required for current use case.
+    @GetMapping
+    public ResponseEntity<ApiResponse<PageResponse<CategoryResponse>>> listCategories(
+            Pageable pageable
+    ) {
+
+        SortValidator.validate(pageable, ALLOWED_SORT_PROPERTIES);
+
+        PageResult<Category> pages = listCategoriesUseCase.execute(PageRequestMapper.toDomain(pageable));
+
+        List<CategoryResponse> content = pages.content()
+                .stream()
+                .map(CategoryResponse::from)
+                .toList();
+
+        PageResponse<CategoryResponse> response = new PageResponse<>(
+                content,
+                pages.page(),
+                pages.size(),
+                pages.totalElements(),
+                pages.totalPages()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<CategoryResponse>> createCategory(
+            @Valid @RequestBody CreateCategoryRequest request
+    ) {
+
+        Category category = createCategoryUseCase.execute(
+                request.name(),
+                request.description()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(CategoryResponse.from(category)));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateCategoryRequest request
+    ) {
+
+        Category category = updateCategoryUseCase.execute(
+                id,
+                request.name(),
+                request.description(),
+                request.active()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(CategoryResponse.from(category)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteCategory(
+            @PathVariable Long id
+    ) {
+
+        deleteCategoryUseCase.execute(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+}
