@@ -3,6 +3,8 @@ package com.tlavu.novacart.modules.catalog.integration;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tlavu.novacart.support.AbstractIntegrationTest;
+import jakarta.persistence.EntityManagerFactory;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,6 +34,9 @@ class CatalogApiIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
     @Test
     void catalogWorkflow_persistsFiltersMovesProtectsAndSoftDeletesResources() throws Exception {
@@ -131,6 +136,37 @@ class CatalogApiIntegrationTest extends AbstractIntegrationTest {
 
         assertThat(successfulMigrationCount).isEqualTo(1);
         assertThat(requiredTableCount).isEqualTo(2);
+    }
+
+    @Test
+    void productReadEndpoints_serializeResponsesWithoutLazyLoadingOrNPlusOne() throws Exception {
+        String suffix = UUID.randomUUID().toString().substring(0, 8);
+        long categoryId = createCategory("Read category " + suffix);
+        long productId = createProduct("Read product " + suffix + " primary", categoryId);
+        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+
+        sessionFactory.getStatistics().clear();
+
+        mockMvc.perform(get("/api/v1/products/{id}", productId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(productId))
+                .andExpect(jsonPath("$.data.categoryId").value(categoryId));
+
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(1);
+
+        createProduct("Read product " + suffix + " secondary", categoryId);
+        sessionFactory.getStatistics().clear();
+
+        mockMvc.perform(get("/api/v1/products")
+                        .queryParam("name", "Read product " + suffix)
+                        .queryParam("page", "0")
+                        .queryParam("size", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.content.length()").value(1))
+                .andExpect(jsonPath("$.data.totalElements").value(2))
+                .andExpect(jsonPath("$.data.content[0].categoryId").value(categoryId));
+
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(2);
     }
 
     private long createCategory(String name) throws Exception {
