@@ -127,6 +127,32 @@ class ProductControllerTest {
     }
 
     @Test
+    void listProducts_withoutPageParameters_usesDefaultPageSize() throws Exception {
+        when(listProductsUseCase.execute(any(ProductFilter.class), any()))
+                .thenReturn(new PageResult<>(List.of(), 0, 20, 0, 0));
+
+        mockMvc.perform(get("/api/v1/products"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.pageSize").value(20));
+
+        verify(listProductsUseCase).execute(any(ProductFilter.class), argThat(page ->
+                page.page() == 0 && page.size() == 20
+        ));
+    }
+
+    @Test
+    void listProducts_withPageSizeAboveMaximum_capsPageSize() throws Exception {
+        when(listProductsUseCase.execute(any(ProductFilter.class), any()))
+                .thenReturn(new PageResult<>(List.of(), 0, 100, 0, 0));
+
+        mockMvc.perform(get("/api/v1/products").queryParam("size", "101"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.pageSize").value(100));
+
+        verify(listProductsUseCase).execute(any(ProductFilter.class), argThat(page -> page.size() == 100));
+    }
+
+    @Test
     void createProduct_whenRequestIsValid_returns201() throws Exception {
         when(createProductUseCase.execute(
                 eq("Wireless Mouse"), eq("Description"), eq(new BigDecimal("19.90")), eq(4), eq(7L)

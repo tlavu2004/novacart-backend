@@ -6,6 +6,7 @@ import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 public class ProductSpecification {
 
@@ -31,8 +32,17 @@ public class ProductSpecification {
                 : (root, query, criteriaBuilder) ->
                     criteriaBuilder.like(
                             criteriaBuilder.lower(root.get("name")),
-                            "%" + name.toLowerCase() + "%"
+                            "%" + escapeLikePattern(name.toLowerCase(Locale.ROOT)) + "%",
+                            '\\'
                     );
+    }
+
+    private static String escapeLikePattern(String value) {
+
+        return value
+                .replace("\\", "\\\\")
+                .replace("%", "\\%")
+                .replace("_", "\\_");
     }
 
     private static Specification<ProductJpaEntity> hasStatus(ProductStatus status) {

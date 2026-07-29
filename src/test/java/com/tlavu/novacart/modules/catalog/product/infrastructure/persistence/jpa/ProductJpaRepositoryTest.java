@@ -341,6 +341,37 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void findAll_withNameContainingLikeWildcards_treatsThemAsLiteralCharacters() {
+
+        CategoryJpaEntity category = persistCategory("Electronics", "electronics");
+        ProductJpaEntity literalMatch = persistProduct(
+                "Mouse 100%_Pro",
+                "mouse-100-pro",
+                category,
+                ProductStatus.DRAFT,
+                "29.90",
+                4
+        );
+        persistProduct(
+                "Mouse 100AAPro",
+                "mouse-100-aa-pro",
+                category,
+                ProductStatus.DRAFT,
+                "29.90",
+                4
+        );
+
+        clearPersistenceContext();
+
+        Page<ProductJpaEntity> result = productRepository.findAll(
+                ProductSpecification.withFilter(new ProductFilter("100%_", null, null, null, null)),
+                PageRequest.of(0, 10)
+        );
+
+        assertThat(result.getContent()).extracting(ProductJpaEntity::getId).containsExactly(literalMatch.getId());
+    }
+
+    @Test
     void productMapping_persistsCategoryAndStatus() {
 
         CategoryJpaEntity CategoryJpaEntity = persistCategory(
