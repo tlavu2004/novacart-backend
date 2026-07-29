@@ -2,11 +2,11 @@ package com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.a
 
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.category.domain.repository.CategoryRepository;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageRequest;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.SortOrder;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.SortOrder;
 import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
-import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper.entity.CategoryPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper.CategoryPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

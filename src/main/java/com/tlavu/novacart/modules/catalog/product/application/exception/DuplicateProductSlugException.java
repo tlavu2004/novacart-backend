@@ -1,6 +1,6 @@
-package com.tlavu.novacart.modules.catalog.product.application.exception.specific;
+package com.tlavu.novacart.modules.catalog.product.application.exception;
 
-import com.tlavu.novacart.modules.catalog.shared.application.exception.code.CatalogErrorCode;
+import com.tlavu.novacart.modules.catalog.shared.application.exception.CatalogErrorCode;
 import com.tlavu.novacart.shared.application.exception.common.ConflictException;
 
 public class DuplicateProductSlugException extends ConflictException {

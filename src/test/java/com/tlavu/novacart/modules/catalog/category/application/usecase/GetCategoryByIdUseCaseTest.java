@@ -1,6 +1,6 @@
 package com.tlavu.novacart.modules.catalog.category.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryNotFoundException;
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.category.domain.repository.CategoryRepository;
 import org.junit.jupiter.api.Test;

@@ -2,8 +2,8 @@ package com.tlavu.novacart.modules.catalog.category.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.category.domain.repository.CategoryRepository;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageRequest;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

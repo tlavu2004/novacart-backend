@@ -1,10 +1,10 @@
 package com.tlavu.novacart.modules.catalog.category.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryHasActiveProductsException;
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryHasActiveProductsException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.port.out.CategoryProductUsagePort;
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.category.domain.repository.CategoryRepository;
-import com.tlavu.novacart.modules.catalog.product.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +17,14 @@ import java.time.Instant;
 public class DeleteCategoryUseCase {
 
     private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
+    private final CategoryProductUsagePort categoryProductUsagePort;
 
     public void execute(Long id) {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
 
-        if (productRepository.existsByCategoryId(id)) {
+        if (categoryProductUsagePort.hasProductsByCategoryId(id)) {
             throw new CategoryHasActiveProductsException(id);
         }
 

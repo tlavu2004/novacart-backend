@@ -1,4 +1,4 @@
-package com.tlavu.novacart.modules.catalog.shared.domain.repository.query;
+package com.tlavu.novacart.modules.catalog.product.domain.repository.query;
 
 import com.tlavu.novacart.modules.catalog.product.domain.enums.ProductStatus;
 

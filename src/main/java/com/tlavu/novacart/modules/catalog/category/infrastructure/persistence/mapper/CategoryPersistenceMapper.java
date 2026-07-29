@@ -1,8 +1,8 @@
-package com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper.entity;
+package com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper;
 
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
-import com.tlavu.novacart.modules.catalog.shared.infrastructure.persistence.mapper.config.MapStructPersistenceConfig;
+import com.tlavu.novacart.modules.catalog.shared.infrastructure.persistence.mapper.MapStructPersistenceConfig;
 import org.mapstruct.Mapper;
 
 @Mapper(config = MapStructPersistenceConfig.class)

@@ -7,7 +7,7 @@ import com.tlavu.novacart.modules.catalog.product.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
 import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa.repository.ProductJpaRepository;
 import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa.specification.ProductSpecification;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
 import com.tlavu.novacart.support.AbstractIntegrationTest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;

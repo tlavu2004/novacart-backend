@@ -2,9 +2,9 @@ package com.tlavu.novacart.modules.catalog.product.application.usecase;
 
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.product.domain.repository.ProductRepository;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageRequest;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
+import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.tlavu.novacart.modules.catalog.shared.infrastructure.persistence.mapper.config;
+package com.tlavu.novacart.modules.catalog.shared.infrastructure.persistence.mapper;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.MapperConfig;

@@ -8,8 +8,8 @@ import com.tlavu.novacart.modules.catalog.product.application.usecase.UpdateProd
 import com.tlavu.novacart.modules.catalog.product.application.usecase.UpdateProductStockUseCase;
 import com.tlavu.novacart.modules.catalog.product.application.usecase.UpdateProductUseCase;
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
+import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
 import com.tlavu.novacart.modules.catalog.shared.presentation.validation.SortValidator;
 import com.tlavu.novacart.modules.catalog.shared.presentation.mapper.PageRequestMapper;
 import com.tlavu.novacart.modules.catalog.product.presentation.dto.request.CreateProductRequest;

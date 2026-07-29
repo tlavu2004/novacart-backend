@@ -1,8 +1,8 @@
 package com.tlavu.novacart.modules.catalog.shared.presentation.mapper;
 
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageRequest;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.SortDirection;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.SortOrder;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.SortDirection;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.SortOrder;
 import org.springframework.data.domain.Pageable;
 
 public final class PageRequestMapper {

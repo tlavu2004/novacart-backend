@@ -1,15 +1,15 @@
 package com.tlavu.novacart.modules.catalog.category.presentation.controller;
 
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryHasActiveProductsException;
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryHasActiveProductsException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryNotFoundException;
 import com.tlavu.novacart.modules.catalog.category.application.usecase.CreateCategoryUseCase;
 import com.tlavu.novacart.modules.catalog.category.application.usecase.DeleteCategoryUseCase;
 import com.tlavu.novacart.modules.catalog.category.application.usecase.GetCategoryByIdUseCase;
 import com.tlavu.novacart.modules.catalog.category.application.usecase.ListCategoriesUseCase;
 import com.tlavu.novacart.modules.catalog.category.application.usecase.UpdateCategoryUseCase;
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.SortDirection;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.SortDirection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

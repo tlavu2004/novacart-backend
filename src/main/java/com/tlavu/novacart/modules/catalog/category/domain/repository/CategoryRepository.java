@@ -1,8 +1,8 @@
 package com.tlavu.novacart.modules.catalog.category.domain.repository;
 
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageRequest;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
 
 import java.util.Optional;
 

@@ -1,7 +1,7 @@
 package com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa.specification;
 
 import com.tlavu.novacart.modules.catalog.product.domain.enums.ProductStatus;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
 import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa.entity.ProductJpaEntity;
 import org.springframework.data.jpa.domain.Specification;
 

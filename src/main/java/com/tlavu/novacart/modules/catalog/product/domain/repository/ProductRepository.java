@@ -1,9 +1,9 @@
 package com.tlavu.novacart.modules.catalog.product.domain.repository;
 
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageRequest;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
+import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
 
 import java.util.Optional;
 
@@ -23,5 +23,4 @@ public interface ProductRepository {
 
     boolean existsBySlugAndIdNot(String name, Long id);
 
-    boolean existsByCategoryId(Long id);
 }

@@ -1,14 +1,14 @@
-package com.tlavu.novacart.modules.catalog.infrastructure.persistence.mapper;
+package com.tlavu.novacart.modules.catalog.integration.persistence;
 
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.product.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
 import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa.entity.ProductJpaEntity;
-import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper.entity.CategoryPersistenceMapper;
-import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper.entity.CategoryPersistenceMapperImpl;
-import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.mapper.entity.ProductPersistenceMapper;
-import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.mapper.entity.ProductPersistenceMapperImpl;
+import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper.CategoryPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.category.infrastructure.persistence.mapper.CategoryPersistenceMapperImpl;
+import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.mapper.ProductPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.mapper.ProductPersistenceMapperImpl;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

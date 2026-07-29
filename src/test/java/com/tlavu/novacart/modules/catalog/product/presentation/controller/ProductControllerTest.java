@@ -1,7 +1,7 @@
 package com.tlavu.novacart.modules.catalog.product.presentation.controller;
 
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryNotFoundException;
-import com.tlavu.novacart.modules.catalog.product.application.exception.specific.ProductNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.product.application.exception.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.product.application.usecase.CreateProductUseCase;
 import com.tlavu.novacart.modules.catalog.product.application.usecase.DeleteProductUseCase;
 import com.tlavu.novacart.modules.catalog.product.application.usecase.GetProductByIdUseCase;
@@ -13,9 +13,9 @@ import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.product.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.product.domain.exception.InvalidProductStatusTransitionException;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.ProductFilter;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.SortDirection;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
+import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.SortDirection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

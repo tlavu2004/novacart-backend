@@ -1,6 +1,6 @@
 package com.tlavu.novacart.modules.catalog.product.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.product.application.exception.specific.ProductNotFoundException;
+import com.tlavu.novacart.modules.catalog.product.application.exception.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.product.domain.enums.ProductStatus;
 import com.tlavu.novacart.modules.catalog.product.domain.exception.InvalidProductStatusTransitionException;

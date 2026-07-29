@@ -1,13 +1,14 @@
 package com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.adapter;
 
+import com.tlavu.novacart.modules.catalog.category.application.port.out.CategoryProductUsagePort;
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.product.domain.repository.ProductRepository;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageRequest;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.ProductFilter;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.SortOrder;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageRequest;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
+import com.tlavu.novacart.modules.catalog.product.domain.repository.query.ProductFilter;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.SortOrder;
 import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa.repository.ProductJpaRepository;
-import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.mapper.entity.ProductPersistenceMapper;
+import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.mapper.ProductPersistenceMapper;
 import com.tlavu.novacart.modules.catalog.product.infrastructure.persistence.jpa.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class ProductPersistenceAdapter implements ProductRepository {
+public class ProductPersistenceAdapter implements ProductRepository, CategoryProductUsagePort {
 
     private final ProductJpaRepository productJpaRepository;
     private final ProductPersistenceMapper productPersistenceMapper;
@@ -75,9 +76,9 @@ public class ProductPersistenceAdapter implements ProductRepository {
     }
 
     @Override
-    public boolean existsByCategoryId(Long id) {
+    public boolean hasProductsByCategoryId(Long categoryId) {
 
-        return productJpaRepository.existsByCategoryId(id);
+        return productJpaRepository.existsByCategoryId(categoryId);
     }
 
     private org.springframework.data.domain.Pageable toPageable(PageRequest pageRequest) {

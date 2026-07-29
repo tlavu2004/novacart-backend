@@ -1,10 +1,10 @@
 package com.tlavu.novacart.modules.catalog.category.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryHasActiveProductsException;
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryHasActiveProductsException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.port.out.CategoryProductUsagePort;
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
 import com.tlavu.novacart.modules.catalog.category.domain.repository.CategoryRepository;
-import com.tlavu.novacart.modules.catalog.product.domain.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -26,7 +26,7 @@ public class DeleteCategoryUseCaseTest {
     private CategoryRepository categoryRepository;
 
     @Mock
-    private ProductRepository productRepository;
+    private CategoryProductUsagePort categoryProductUsagePort;
 
     @InjectMocks
     private DeleteCategoryUseCase useCase;
@@ -49,7 +49,7 @@ public class DeleteCategoryUseCaseTest {
         Category category = existingCategory(id);
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
-        when(productRepository.existsByCategoryId(id)).thenReturn(false);
+        when(categoryProductUsagePort.hasProductsByCategoryId(id)).thenReturn(false);
 
         // Act
         useCase.execute(id);
@@ -62,7 +62,7 @@ public class DeleteCategoryUseCaseTest {
         assertThat(captured.isActive()).isFalse();
         assertThat(captured.getDeletedAt()).isNotNull();
         verify(categoryRepository).findById(id);
-        verify(productRepository).existsByCategoryId(id);
+        verify(categoryProductUsagePort).hasProductsByCategoryId(id);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class DeleteCategoryUseCaseTest {
 
         verify(categoryRepository).findById(id);
         verify(categoryRepository, never()).save(any(Category.class));
-        verifyNoInteractions(productRepository);
+        verifyNoInteractions(categoryProductUsagePort);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class DeleteCategoryUseCaseTest {
         Long id = 99L;
         Category category = existingCategory(id);
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
-        when(productRepository.existsByCategoryId(id)).thenReturn(true);
+        when(categoryProductUsagePort.hasProductsByCategoryId(id)).thenReturn(true);
 
         // Act & Assert
         assertThatThrownBy(() -> useCase.execute(id))
@@ -99,7 +99,7 @@ public class DeleteCategoryUseCaseTest {
         assertThat(category.isActive()).isTrue();
         assertThat(category.getDeletedAt()).isNull();
         verify(categoryRepository).findById(id);
-        verify(productRepository).existsByCategoryId(id);
+        verify(categoryProductUsagePort).hasProductsByCategoryId(id);
         verify(categoryRepository, never()).save(any(Category.class));
     }
 }

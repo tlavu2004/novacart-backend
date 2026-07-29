@@ -1,6 +1,6 @@
 package com.tlavu.novacart.modules.catalog.product.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.product.application.exception.specific.ProductNotFoundException;
+import com.tlavu.novacart.modules.catalog.product.application.exception.ProductNotFoundException;
 import com.tlavu.novacart.modules.catalog.product.domain.entity.Product;
 import com.tlavu.novacart.modules.catalog.product.domain.repository.ProductRepository;
 import org.junit.jupiter.api.Test;

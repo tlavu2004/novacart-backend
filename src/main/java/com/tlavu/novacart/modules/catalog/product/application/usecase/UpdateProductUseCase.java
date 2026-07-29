@@ -1,9 +1,9 @@
 package com.tlavu.novacart.modules.catalog.product.application.usecase;
 
-import com.tlavu.novacart.modules.catalog.category.application.exception.specific.CategoryNotFoundException;
-import com.tlavu.novacart.modules.catalog.product.application.exception.specific.DuplicateProductNameException;
-import com.tlavu.novacart.modules.catalog.product.application.exception.specific.DuplicateProductSlugException;
-import com.tlavu.novacart.modules.catalog.product.application.exception.specific.ProductNotFoundException;
+import com.tlavu.novacart.modules.catalog.category.application.exception.CategoryNotFoundException;
+import com.tlavu.novacart.modules.catalog.product.application.exception.DuplicateProductNameException;
+import com.tlavu.novacart.modules.catalog.product.application.exception.DuplicateProductSlugException;
+import com.tlavu.novacart.modules.catalog.product.application.exception.ProductNotFoundException;
 import com.tlavu.novacart.shared.application.exception.code.global.GlobalErrorCode;
 import com.tlavu.novacart.shared.application.exception.common.InvalidInputException;
 

@@ -6,7 +6,7 @@ import com.tlavu.novacart.modules.catalog.category.application.usecase.GetCatego
 import com.tlavu.novacart.modules.catalog.category.application.usecase.ListCategoriesUseCase;
 import com.tlavu.novacart.modules.catalog.category.application.usecase.UpdateCategoryUseCase;
 import com.tlavu.novacart.modules.catalog.category.domain.entity.Category;
-import com.tlavu.novacart.modules.catalog.shared.domain.repository.query.PageResult;
+import com.tlavu.novacart.modules.catalog.shared.domain.query.PageResult;
 import com.tlavu.novacart.modules.catalog.shared.presentation.validation.SortValidator;
 import com.tlavu.novacart.modules.catalog.shared.presentation.mapper.PageRequestMapper;
 import com.tlavu.novacart.modules.catalog.category.presentation.dto.request.CreateCategoryRequest;
