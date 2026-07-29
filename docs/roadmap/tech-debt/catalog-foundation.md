@@ -17,9 +17,9 @@ This document consolidates unchecked work from the original Week 1–2 debt list
 - [x] **TD-04 — Exception hierarchy and HTTP mapping:** domain status-transition exceptions are plain Java; Application translates them to `CatalogErrorCode` business errors, with `PROD_004` protected by controller tests.
 - [x] **TD-13 — Reversed dependency direction:** Application and Presentation no longer import Catalog Infrastructure.
 
-| ID | Work item | Trigger/source | Definition of done |
-| --- | --- | --- | --- |
-| TD-03 | OpenAPI and API contract tests | Day 12 | **Completed:** `/v3/api-docs` exposes the `v1` Catalog contract; the integration test verifies the important Catalog paths. |
+| ID    | Work item                      | Trigger/source | Definition of done                                                                                                          |
+|-------|--------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------|
+| TD-03 | OpenAPI and API contract tests | Day 12         | **Completed:** `/v3/api-docs` exposes the `v1` Catalog contract; the integration test verifies the important Catalog paths. |
 
 ## Next
 
