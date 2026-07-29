@@ -20,6 +20,7 @@ import com.tlavu.novacart.modules.catalog.product.presentation.dto.request.Updat
 import com.tlavu.novacart.modules.catalog.product.presentation.dto.response.ProductResponse;
 import com.tlavu.novacart.shared.presentation.dto.response.ApiResponse;
 import com.tlavu.novacart.shared.presentation.dto.response.PageResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,10 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
+@Tag(
+        name = "Products",
+        description = "Manage catalog products, including details, lifecycle status, stock, and category assignment."
+)
 public class ProductController {
 
     private final GetProductByIdUseCase getProductByIdUseCase;

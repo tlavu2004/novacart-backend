@@ -14,6 +14,7 @@ import com.tlavu.novacart.modules.catalog.category.presentation.dto.request.Upda
 import com.tlavu.novacart.modules.catalog.category.presentation.dto.response.CategoryResponse;
 import com.tlavu.novacart.shared.presentation.dto.response.ApiResponse;
 import com.tlavu.novacart.shared.presentation.dto.response.PageResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,10 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
+@Tag(
+        name = "Categories",
+        description = "Manage catalog categories used to organise products."
+)
 public class CategoryController {
 
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;
