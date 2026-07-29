@@ -16,12 +16,10 @@ This document consolidates unchecked work from the original Week 1–2 debt list
 - [x] **TD-03 — OpenAPI and API contract tests:** OpenAPI is versioned as `v1`; an integration contract test protects the Catalog paths in `/v3/api-docs`.
 - [x] **TD-04 — Exception hierarchy and HTTP mapping:** domain status-transition exceptions are plain Java; Application translates them to `CatalogErrorCode` business errors, with `PROD_004` protected by controller tests.
 - [x] **TD-13 — Reversed dependency direction:** Application and Presentation no longer import Catalog Infrastructure.
-- [ ] **TD-14 — Uncontrolled domain setters:** remove public business-state setters from `Category` and `Product` while preserving explicit mapping and invariants.
 
 | ID | Work item | Trigger/source | Definition of done |
 | --- | --- | --- | --- |
 | TD-03 | OpenAPI and API contract tests | Day 12 | **Completed:** `/v3/api-docs` exposes the `v1` Catalog contract; the integration test verifies the important Catalog paths. |
-| TD-14 | Public domain setters | Day 14 review | Business state has no public setters; mapper and domain tests pass. |
 
 ## Next
 
@@ -36,6 +34,7 @@ This document consolidates unchecked work from the original Week 1–2 debt list
 - [ ] **TD-10 — RFC 7807 Problem Details.** Revisit when a public/interoperable API needs a standard error contract.
 - [ ] **TD-11 — Archive table and background hard-delete.** Revisit with retention/compliance requirements or meaningful data volume.
 - [ ] **TD-12 — Security tests.** Revisit together with TD-05.
+- [x] **TD-14 — Public Domain setters (accepted trade-off recorded).** `Category` and `Product` use direct MapStruct mapping against near one-to-one JPA models. Replacing setters with a public all-fields constructor or builder would not improve invariant protection; a controlled `restore`/rehydration API is deferred until Domain state becomes immutable or materially diverges from persistence state. Production business flows must use named methods such as `rename`, `changePrice`, and `changeStatus` rather than setters.
 
 ## Verify / learning backlog
 
