@@ -16,7 +16,8 @@ public record ProductResponse(
         Integer stockQuantity,
         Long categoryId,
         Instant createdAt,
-        Instant updatedAt
+        Instant updatedAt,
+        Long version
 ) {
     public static ProductResponse from(Product product) {
         return new ProductResponse(
@@ -29,7 +30,8 @@ public record ProductResponse(
                 product.getStockQuantity(),
                 product.getCategory().getId(),
                 product.getCreatedAt(),
-                product.getUpdatedAt()
+                product.getUpdatedAt(),
+                product.getVersion()
         );
     }
 }

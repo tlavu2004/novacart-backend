@@ -128,6 +128,7 @@ public class ProductController {
 
         Product product = updateProductUseCase.execute(
                 id,
+                request.version(),
                 request.name(),
                 request.description(),
                 request.price(),

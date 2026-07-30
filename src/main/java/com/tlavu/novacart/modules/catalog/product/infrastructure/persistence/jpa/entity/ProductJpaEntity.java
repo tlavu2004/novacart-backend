@@ -58,6 +58,10 @@ public class ProductJpaEntity {
     @Column(name = "deleted_at")
     private Instant deletedAt;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryJpaEntity category;

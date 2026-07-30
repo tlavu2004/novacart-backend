@@ -25,6 +25,7 @@ public class Product {
     private Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
+    private Long version;
     private Category category;
 
     public static Product create(

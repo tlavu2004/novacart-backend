@@ -221,13 +221,14 @@ class ProductControllerTest {
         updated.setSlug("keyboard");
         updated.setPrice(new BigDecimal("49.90"));
         when(updateProductUseCase.execute(
-                eq(1L), eq("Keyboard"), isNull(), eq(new BigDecimal("49.90")), eq(7L)
+                eq(1L), eq(0L), eq("Keyboard"), isNull(), eq(new BigDecimal("49.90")), eq(7L)
         )).thenReturn(updated);
 
         mockMvc.perform(patch("/api/v1/products/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
+                                  "version": 0,
                                   "name": "Keyboard",
                                   "price": 49.90,
                                   "categoryId": 7
@@ -254,13 +255,13 @@ class ProductControllerTest {
 
     @Test
     void updateProduct_whenProductDoesNotExist_returns404() throws Exception {
-        when(updateProductUseCase.execute(99L, "Keyboard", null, null, null))
+        when(updateProductUseCase.execute(99L, 0L, "Keyboard", null, null, null))
                 .thenThrow(new ProductNotFoundException(99L));
 
         mockMvc.perform(patch("/api/v1/products/{id}", 99L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {"name": "Keyboard"}
+                                {"version": 0, "name": "Keyboard"}
                                 """))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error.code").value("PROD_003"));
