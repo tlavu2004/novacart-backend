@@ -176,6 +176,7 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         assertThat(productRepository.findAll()).extracting(ProductJpaEntity::getId).containsExactly(visible.getId());
         assertThat(productRepository.existsByNameIgnoreCase("Archived Mouse")).isFalse();
         assertThat(productRepository.existsBySlug("archived-mouse")).isFalse();
+        assertThat(productRepository.isSlugReserved("ARCHIVED-MOUSE")).isTrue();
     }
 
     @Test

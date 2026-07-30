@@ -254,6 +254,17 @@ class ProductControllerTest {
     }
 
     @Test
+    void updateProduct_whenVersionIsMissing_returns400WithoutCallingUseCase() throws Exception {
+        mockMvc.perform(patch("/api/v1/products/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\": \"Keyboard\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error.fieldErrors[*].field", hasItem("version")));
+
+        verifyNoInteractions(updateProductUseCase);
+    }
+
+    @Test
     void updateProduct_whenProductDoesNotExist_returns404() throws Exception {
         when(updateProductUseCase.execute(99L, 0L, "Keyboard", null, null, null))
                 .thenThrow(new ProductNotFoundException(99L));
