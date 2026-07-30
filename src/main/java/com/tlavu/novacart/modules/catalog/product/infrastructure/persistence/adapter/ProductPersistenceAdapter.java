@@ -65,6 +65,12 @@ public class ProductPersistenceAdapter implements ProductRepository, CategoryPro
         return productJpaRepository.existsBySlug(slug);
     }
 
+    @Override
+    public boolean isSlugReserved(String slug) {
+
+        return productJpaRepository.isSlugReserved(slug);
+    }
+
     public boolean existsByNameIgnoreCaseAndIdNot(String name, Long id) {
 
         return productJpaRepository.existsByNameIgnoreCaseAndIdNot(name, id);
