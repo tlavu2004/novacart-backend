@@ -16,7 +16,8 @@ public enum CatalogErrorCode implements ErrorCode {
     PRODUCT_ALREADY_EXISTS("PROD_001", "Product already exists"),
     PRODUCT_SLUG_ALREADY_EXISTS("PROD_002", "Product slug already exists"),
     PRODUCT_NOT_FOUND("PROD_003", "Product not found"),
-    INVALID_PRODUCT_STATUS_TRANSITION("PROD_004", "Invalid product status transition");
+    INVALID_PRODUCT_STATUS_TRANSITION("PROD_004", "Invalid product status transition"),
+    PRODUCT_SLUG_GENERATION_FAILED("PROD_005", "Unable to generate a unique product slug");
 
     private final String code;
     private final String defaultMessage;
