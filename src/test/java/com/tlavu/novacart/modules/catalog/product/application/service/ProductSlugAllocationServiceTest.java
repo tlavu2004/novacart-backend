@@ -54,7 +54,22 @@ class ProductSlugAllocationServiceTest {
         verifyNoInteractions(writer);
     }
 
+    @Test
+    void allocateAndPersist_whenWriteFailsForAnotherConstraint_doesNotRetry() {
+        ProductRepository repository = mock(ProductRepository.class);
+        ProductSlugWriteAttemptPort writer = mock(ProductSlugWriteAttemptPort.class);
+        ProductSlugConstraintViolationPort detector = mock(ProductSlugConstraintViolationPort.class);
+        when(repository.isSlugReserved(anyString())).thenReturn(false);
+        org.springframework.dao.DataIntegrityViolationException failure =
+                new org.springframework.dao.DataIntegrityViolationException("other");
+        doThrow(failure).when(writer).persistAndFlush(any());
+        when(detector.isSlugUniqueViolation(failure)).thenReturn(false);
 
+        assertThatThrownBy(() -> service(repository, writer, detector, properties(2), new SimpleMeterRegistry())
+                .allocateAndPersist(product("Ao thun trắng"))).isSameAs(failure);
+
+        verify(writer, times(1)).persistAndFlush(any());
+    }
 
     private ProductSlugAllocationService service(
             ProductRepository repository,
