@@ -12,6 +12,7 @@ CREATE TABLE products (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ,
+    version BIGINT NOT NULL DEFAULT 0,
 
     CONSTRAINT pk_products PRIMARY KEY (id),
 
@@ -25,6 +26,6 @@ CREATE TABLE products (
 
 CREATE INDEX idx_products_status ON products (status);
 CREATE INDEX idx_products_category_id ON products (category_id);
+CREATE INDEX idx_products_name ON products (LOWER(name));
 
-CREATE UNIQUE INDEX uk_products_name ON products (LOWER(name));
 CREATE UNIQUE INDEX uk_products_slug ON products (LOWER(slug));
