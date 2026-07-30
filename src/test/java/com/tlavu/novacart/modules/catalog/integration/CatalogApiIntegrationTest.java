@@ -68,6 +68,7 @@ class CatalogApiIntegrationTest extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
+                                  "version": 0,
                                   "name": "%s",
                                   "price": 49.90,
                                   "categoryId": %d
