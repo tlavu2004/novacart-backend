@@ -53,7 +53,7 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void existsByNameAndSlug_whenMatchingProductExists_returnsTrue() {
+    void isSlugReserved_whenMatchingProductExists_returnsTrue() {
         CategoryJpaEntity CategoryJpaEntity = persistCategory(
                 "Electronics",
                 "electronics"
@@ -70,15 +70,13 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
 
         clearPersistenceContext();
 
-        assertThat(productRepository.existsByNameIgnoreCase("WIRELESS MOUSE")).isTrue();
-        assertThat(productRepository.existsByNameIgnoreCase("Keyboard")).isFalse();
-        assertThat(productRepository.existsBySlug("wireless-mouse")).isTrue();
-        assertThat(productRepository.existsBySlug("keyboard")).isFalse();
+        assertThat(productRepository.isSlugReserved("WIRELESS-MOUSE")).isTrue();
+        assertThat(productRepository.isSlugReserved("keyboard")).isFalse();
         assertThat(productRepository.findById(ProductJpaEntity.getId())).isPresent();
     }
 
     @Test
-    void existsByNameOrSlugAndIdNot_excludesCurrentProduct() {
+    void productsWithDistinctSlugs_canCoexist() {
 
         CategoryJpaEntity CategoryJpaEntity = persistCategory(
                 "Electronics",
@@ -105,12 +103,8 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
 
         clearPersistenceContext();
 
-        assertThat(productRepository.existsByNameIgnoreCaseAndIdNot("WIRELESS MOUSE", mouse.getId())).isFalse();
-        assertThat(productRepository.existsBySlugAndIdNot("wireless-mouse", mouse.getId())).isFalse();
-        assertThat(productRepository.existsByNameIgnoreCaseAndIdNot("Keyboard", mouse.getId())).isTrue();
-        assertThat(productRepository.existsBySlugAndIdNot("keyboard", mouse.getId())).isTrue();
-        assertThat(productRepository.existsByNameIgnoreCaseAndIdNot("Keyboard", keyboard.getId())).isFalse();
-        assertThat(productRepository.existsBySlugAndIdNot("keyboard", keyboard.getId())).isFalse();
+        assertThat(productRepository.findById(mouse.getId())).isPresent();
+        assertThat(productRepository.findById(keyboard.getId())).isPresent();
     }
 
     @Test
@@ -174,8 +168,6 @@ class ProductJpaRepositoryTest extends AbstractIntegrationTest {
         assertThat(productRepository.findById(visible.getId())).isPresent();
         assertThat(productRepository.findById(deleted.getId())).isEmpty();
         assertThat(productRepository.findAll()).extracting(ProductJpaEntity::getId).containsExactly(visible.getId());
-        assertThat(productRepository.existsByNameIgnoreCase("Archived Mouse")).isFalse();
-        assertThat(productRepository.existsBySlug("archived-mouse")).isFalse();
         assertThat(productRepository.isSlugReserved("ARCHIVED-MOUSE")).isTrue();
     }
 

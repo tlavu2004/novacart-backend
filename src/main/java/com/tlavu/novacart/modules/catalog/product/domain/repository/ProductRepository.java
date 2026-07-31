@@ -15,14 +15,5 @@ public interface ProductRepository {
 
     PageResult<Product> findAll(ProductFilter filter, PageRequest pageRequest);
 
-    boolean existsByNameIgnoreCase(String name);
-
-    boolean existsBySlug(String slug);
-
     boolean isSlugReserved(String slug);
-
-    boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
-
-    boolean existsBySlugAndIdNot(String name, Long id);
-
 }

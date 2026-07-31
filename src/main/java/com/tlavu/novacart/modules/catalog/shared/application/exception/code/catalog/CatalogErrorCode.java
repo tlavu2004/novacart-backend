@@ -13,12 +13,10 @@ public enum CatalogErrorCode implements ErrorCode {
     CATEGORY_NOT_FOUND("CAT_003", "Category not found"),
     CATEGORY_HAS_ACTIVE_PRODUCTS("CAT_004", "Category has active products"),
 
-    PRODUCT_ALREADY_EXISTS("PROD_001", "Product already exists"),
-    PRODUCT_SLUG_ALREADY_EXISTS("PROD_002", "Product slug already exists"),
-    PRODUCT_NOT_FOUND("PROD_003", "Product not found"),
-    INVALID_PRODUCT_STATUS_TRANSITION("PROD_004", "Invalid product status transition"),
-    PRODUCT_SLUG_GENERATION_FAILED("PROD_005", "Unable to generate a unique product slug"),
-    PRODUCT_VERSION_CONFLICT("PROD_006", "Product was modified by another request");
+    PRODUCT_NOT_FOUND("PROD_001", "Product not found"),
+    INVALID_PRODUCT_STATUS_TRANSITION("PROD_002", "Invalid product status transition"),
+    PRODUCT_SLUG_GENERATION_FAILED("PROD_003", "Unable to generate a unique product slug"),
+    PRODUCT_VERSION_CONFLICT("PROD_004", "Product was modified by another request");
 
     private final String code;
     private final String defaultMessage;

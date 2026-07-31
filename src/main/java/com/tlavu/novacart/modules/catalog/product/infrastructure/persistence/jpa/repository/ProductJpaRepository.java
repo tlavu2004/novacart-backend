@@ -29,10 +29,6 @@ public interface ProductJpaRepository
             @NonNull Pageable pageable
     );
 
-    boolean existsByNameIgnoreCase(String name);
-
-    boolean existsBySlug(String slug);
-
     @Query(value = """
             SELECT EXISTS (
                 SELECT 1
@@ -41,10 +37,6 @@ public interface ProductJpaRepository
             )
             """, nativeQuery = true)
     boolean isSlugReserved(@Param("slug") String slug);
-
-    boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
-
-    boolean existsBySlugAndIdNot(String name, Long id);
 
     boolean existsByCategoryId(Long id);
 }
